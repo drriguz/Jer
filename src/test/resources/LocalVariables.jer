@@ -1,0 +1,12 @@
+main(args: [String) = {
+    msg: String = "hello world!"
+    pi: Float = 3.1415926f
+    kb: Integer = 1024
+    success: Bool = true
+    ch: Char = '\n'
+
+    p: HashMap
+
+    // array types
+    fibs: [Integer = {1, 1, 2, 3, 5}
+}

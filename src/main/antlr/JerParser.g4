@@ -47,7 +47,18 @@ block
     : '{' blockStatement* '}'
     ;
 blockStatement
-    : statement
+    : variableDeclaration
+    | statement
+    ;
+variableDeclaration
+    : IDENTIFIER ':' type ('=' variableInitializer)?
+    ;
+variableInitializer
+    : arrayInitializer
+    | expression
+    ;
+arrayInitializer
+    : '{' (variableInitializer (',' variableInitializer)*)? '}'
     ;
 statement
     : expression
