@@ -1,0 +1,13 @@
+main(args: [String) = {
+
+    running: Bool = true
+    if(running) {
+        println("Hello world")
+    }
+
+    if(running) {
+        println("Hello world")
+    } else {
+        println("stopped")
+    }
+}

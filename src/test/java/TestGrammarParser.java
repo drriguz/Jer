@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.junit.Assert.fail;
+
 
 @RunWith(Parameterized.class)
 public class TestGrammarParser {
@@ -20,13 +22,18 @@ public class TestGrammarParser {
         return Arrays.asList(
                 "HelloWorld.jer",
                 "EmptyFunction.jer",
-                "LocalVariables.jer"
+                "LocalVariables.jer",
+                "Control.jer"
         );
     }
 
     @Test
     public void parseSource() throws IOException {
         SyntaxParser parser = new SyntaxParser();
-        parser.parse(source);
+        try {
+            parser.parse(source);
+        } catch (Exception ex) {
+            fail("Failed to parse:" + source + " " + ex.getMessage());
+        }
     }
 }

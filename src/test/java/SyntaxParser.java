@@ -17,7 +17,5 @@ public class SyntaxParser {
 
         // try get the parsed object
         JerParser.CompilationUintContext a = parser.compilationUint();
-
-
     }
 }

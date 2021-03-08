@@ -61,10 +61,22 @@ arrayInitializer
     : '{' (variableInitializer (',' variableInitializer)*)? '}'
     ;
 statement
-    : expression
+    : block
+    | IF parExpression statement (ELSE statement) ?
+    | expression
     ;
 expression
     : primary
+    | methodCall
+    ;
+methodCall
+    : IDENTIFIER '(' expressionList? ')'
+    ;
+expressionList
+    : expression (',' expression)*
+    ;
+parExpression
+    : '(' expression ')'
     ;
 primary
     : '(' expression ')'
