@@ -1,0 +1,12 @@
+use foo/Point
+
+abstract Shape {
+    area: Double
+    sideEffect()
+}
+
+abstract Movable {
+    position: Point
+    move(to: Point)
+    currentPosition() -> Point
+}

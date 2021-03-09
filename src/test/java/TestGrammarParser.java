@@ -23,7 +23,11 @@ public class TestGrammarParser {
                 "HelloWorld.jer",
                 "EmptyFunction.jer",
                 "LocalVariables.jer",
-                "Control.jer"
+                "Control.jer",
+                "Functions.jer",
+                "Abstract.jer",
+                "CircleType.jer",
+                "AllInOne.jer"
         );
     }
 

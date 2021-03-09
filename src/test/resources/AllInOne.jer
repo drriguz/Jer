@@ -1,0 +1,39 @@
+use java/lang/String
+use java/util/DateTime
+
+const pi: Float = 3.1415926f
+const msg: String = "hello world"
+const kb: Integer = 1024
+const success: Boolean = true
+const id: Long = 12345678
+
+main(args: [String) = {
+    (println "Hello world")
+}
+
+circleArea(radius: Float) -> Float = {
+    return pi(multiply 2, radius)
+}
+
+abstract Movable {
+    x: Integer
+    y: Integer
+    move(x1: Integer, y1: Integer)
+}
+
+abstract Animal {
+    name: String
+    sayHelloTo(person: Person)
+    address() -> String
+}
+
+type Dog is Animal, Movable {
+    (name) = {
+        x = 0
+        y = 0
+    }
+
+    sayHelloTo(person: Person) = {
+        (println "Hello")
+    }
+}

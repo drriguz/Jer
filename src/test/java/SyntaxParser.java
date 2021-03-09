@@ -12,6 +12,7 @@ public class SyntaxParser {
                         .getContextClassLoader()
                         .getResourceAsStream(source)));
         JerLexer lexer = new JerLexer(charStream);
+        lexer.addErrorListener(new ErrorListener());
         JerParser parser = new JerParser(new CommonTokenStream(lexer));
         parser.setErrorHandler(new BailErrorStrategy());
 

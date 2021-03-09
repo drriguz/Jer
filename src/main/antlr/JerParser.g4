@@ -5,50 +5,75 @@ options { tokenVocab=JerLexer; }
 @header { package com.riguz.jer.antlr.generated; }
 
 compilationUint
-    : useDeclaration* typeDeclaration* EOF
+    : importedType* declaration* EOF
     ;
 
-useDeclaration
+/** imports **/
+importedType
     : USE fullPath
     ;
-
 fullPath
-    : (IDENTIFIER '/')* TYPE;
-
-typeDeclaration
-    : functionDeclaration
+    : (IDENTIFIER '/')* TYPE_NAME
     ;
 
-functionDeclaration
-    : IDENTIFIER '(' formalParameters? ')' functionReturnType? '='
-      methodBody
+declaration
+    : constantDeclaration
+    | methodDeclaration
+    | abstractDeclaration
+    | typeDeclaration
+    ;
+
+constantDeclaration
+    : CONST variableDeclaration
+    ;
+/** method **/
+methodDeclaration
+    : methodSignature methodImplementation?
+    ;
+methodSignature
+    : IDENTIFIER '(' formalParameters? ')' functionReturnType?
+    ;
+formalParameters
+    : formalParameter (',' formalParameter)*
     ;
 functionReturnType
     : TO type
     ;
+methodImplementation
+    : '=' block
+    ;
 formalParameter
     : IDENTIFIER ':' type
     ;
+/** abstract & type **/
+abstractDeclaration
+    : ABSTRACT TYPE_NAME '{' propertyDeclaration* methodSignature*'}'
+    ;
+typeDeclaration
+    : TYPE TYPE_NAME typeAbstractions? '{' propertyDeclaration* constructorDeclaration* methodDeclaration*'}'
+    ;
+typeAbstractions
+    : IS TYPE_NAME (',' TYPE_NAME)*
+    ;
+propertyDeclaration
+    : IDENTIFIER ':' type
+    ;
+constructorDeclaration
+    : '(' constructorFormalArguments? ')' methodImplementation
+    ;
+constructorFormalArguments
+    : constructorFormalArgument (',' constructorFormalArgument)*
+    ;
+constructorFormalArgument
+    : IDENTIFIER (':' TYPE_NAME)?
+    ;
+/** type & variable **/
 type
-    : TYPE
+    : TYPE_NAME
     | arrayType
     ;
 arrayType
     : '[' type
-    ;
-formalParameters
-    : formalParameter (',' formalParameter) *
-    ;
-
-methodBody
-    : block
-    ;
-block
-    : '{' blockStatement* '}'
-    ;
-blockStatement
-    : variableDeclaration
-    | statement
     ;
 variableDeclaration
     : IDENTIFIER ':' type ('=' variableInitializer)?
@@ -58,25 +83,55 @@ variableInitializer
     | expression
     ;
 arrayInitializer
-    : '{' (variableInitializer (',' variableInitializer)*)? '}'
+    : '{' variableInitializer (',' variableInitializer)* '}'
+    ;
+
+block
+    : '{' statement* '}'
     ;
 statement
+    : variableDeclaration
+    | embeddedStatement
+    ;
+
+embeddedStatement
     : block
-    | IF parExpression statement (ELSE statement) ?
-    | expression
+    | assignment
+    | expressionStatement
+    | selectionStatement
+    | loopStatement
+    | returnStatement
     ;
-expression
-    : primary
-    | methodCall
+assignment
+    : IDENTIFIER '=' expression
     ;
+selectionStatement
+    : IF '(' expression ')' statement (ELSE statement)?
+    ;
+loopStatement
+    : WHILE '(' expression ')' statement
+    ;
+returnStatement
+    : RETURN expression
+    ;
+expressionStatement
+    : methodCall
+    ;
+
 methodCall
-    : IDENTIFIER '(' expressionList? ')'
+    : instance=IDENTIFIER? '('methodName=IDENTIFIER methodArguments? ')'
     ;
-expressionList
+methodArguments
     : expression (',' expression)*
     ;
-parExpression
-    : '(' expression ')'
+
+expression
+    : primary
+    | expression bop='.'
+        ( methodCall
+        | IDENTIFIER
+        )
+    | methodCall
     ;
 primary
     : '(' expression ')'

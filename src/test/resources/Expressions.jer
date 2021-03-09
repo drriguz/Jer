@@ -1,0 +1,4 @@
+foo() = {
+    f: Boolean = true
+    f.a().b().c()
+}

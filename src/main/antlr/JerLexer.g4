@@ -2,10 +2,16 @@ lexer grammar JerLexer;
 
 @header { package com.riguz.jer.antlr.generated; }
 
-USE :  'use';
-IF  :  'if';
-ELSE:  'else';
-FOR :  'for';
+USE :     'use';
+IF  :     'if';
+ELSE:     'else';
+WHILE:    'while';
+RETURN:   'return';
+ABSTRACT: 'abstract';
+TYPE:     'type';
+STRUCT:   'struct';
+CONST:    'const';
+IS:       'is';
 
 LPAREN: '(';
 RPAREN: ')';
@@ -16,6 +22,7 @@ RBRACK: ']';
 SLASH : '/';
 COLON : ':';
 COMMA : ',';
+DOT   : '.';
 EAUQL : '=';
 
 TO    : '->';
@@ -33,7 +40,7 @@ COMMENT:            '/*' .*? '*/'    -> channel(HIDDEN);
 LINE_COMMENT:       '//' ~[\r\n]*    -> channel(HIDDEN);
 
 IDENTIFIER:         [a-z] LetterOrDigit*;
-TYPE:               [A-Z] LetterOrDigit*;
+TYPE_NAME:               [A-Z] LetterOrDigit*;
 fragment LetterOrDigit
     : Letter
     | [0-9]

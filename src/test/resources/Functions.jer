@@ -1,0 +1,3 @@
+sum(a: Integer, b: Integer) -> Integer = {
+    return a.add(b)
+}
