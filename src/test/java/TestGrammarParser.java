@@ -27,7 +27,8 @@ public class TestGrammarParser {
                 "Functions.jer",
                 "Abstract.jer",
                 "CircleType.jer",
-                "AllInOne.jer"
+                "AllInOne.jer",
+                "Constructors.jer"
         );
     }
 
@@ -37,6 +38,7 @@ public class TestGrammarParser {
         try {
             parser.parse(source);
         } catch (Exception ex) {
+            ex.printStackTrace();
             fail("Failed to parse:" + source + " " + ex.getMessage());
         }
     }

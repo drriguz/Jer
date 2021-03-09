@@ -117,7 +117,9 @@ returnStatement
 expressionStatement
     : methodCall
     ;
-
+objectCreation
+    : NEW '(' methodArguments? ')'
+    ;
 methodCall
     : instance=IDENTIFIER? '('methodName=IDENTIFIER methodArguments? ')'
     ;
@@ -132,6 +134,7 @@ expression
         | IDENTIFIER
         )
     | methodCall
+    | objectCreation
     ;
 primary
     : '(' expression ')'

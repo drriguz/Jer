@@ -12,6 +12,7 @@ TYPE:     'type';
 STRUCT:   'struct';
 CONST:    'const';
 IS:       'is';
+NEW:      'new';
 
 LPAREN: '(';
 RPAREN: ')';

@@ -1,0 +1,25 @@
+abstract Identifier {
+    name: String
+}
+type Person is Identifier{
+    age: Integer
+    classify: String
+
+    (name, age) = {
+        classify = "Person"
+    }
+
+    (name) = {
+        classify = "Person"
+        age = 0
+    }
+
+    (name, age, customType: String) = {
+        classify = customType
+    }
+}
+
+main(args: [String) = {
+    p: Person = new ("Riguz", 20)
+    p1: Person = new ("James")
+}
