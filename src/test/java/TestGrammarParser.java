@@ -28,7 +28,9 @@ public class TestGrammarParser {
                 "Abstract.jer",
                 "CircleType.jer",
                 "AllInOne.jer",
-                "Constructors.jer"
+                "Expressions.jer",
+                "Constructors.jer",
+                "Array.jer"
         );
     }
 

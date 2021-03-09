@@ -1,4 +1,13 @@
-foo() = {
-    f: Boolean = true
-    f.a().b().c()
+foo(x: Boolean) = {
+    f: Boolean = x(and false)
+    if(x(and true)) {
+
+    }
+
+    y: Boolean  = x
+
+    {
+        z: Boolean  = x
+        z(toString)
+    }
 }
