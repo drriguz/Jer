@@ -13,18 +13,28 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class AntlrParser implements Parser {
+    private final Path workingDirectory;
+
+    public AntlrParser(Path workingDirectory) {
+        this.workingDirectory = workingDirectory;
+    }
+
+    public AntlrParser() {
+        this.workingDirectory = Paths.get(".");
+    }
+
     @Override
     public Script parse(String sourceFile) {
-        File file = new File(sourceFile);
-
-        if (!file.getName().endsWith(".jer"))
-            throw new CompileException("File is not a jer source file (*.jer)");
-
+        Path filePath = workingDirectory.resolve(sourceFile);
+        String packageName = new File(sourceFile).getParentFile().getPath();
         try {
+            File file = filePath.toFile();
             JerParser antlrParser = createAntlrParser(file);
-            ScriptVisitor scriptVisitor = new ScriptVisitor(file.getName(), file.getParentFile().getPath());
+            ScriptVisitor scriptVisitor = new ScriptVisitor(file.getName(), packageName);
             return scriptVisitor.visitCompilationUint(antlrParser.compilationUint());
         } catch (IOException e) {
             throw new CompileException("Parse error:" + e.getMessage());

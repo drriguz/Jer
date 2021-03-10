@@ -5,18 +5,20 @@ import com.riguz.jer.compile.def.Script;
 import com.riguz.jer.compile.exception.CompileException;
 import org.junit.Test;
 
+import java.nio.file.Paths;
+
 import static org.junit.Assert.*;
 
 public class AntlrParserTest {
-    final Parser parser = new AntlrParser();
+    final Parser parser = new AntlrParser(Paths.get("src/test/resources"));
 
     @Test
     public void detectSourceFilePackage() {
-        String source = "examples/com/riguz/HelloWorld.jer";
+        String source = "com/riguz/examples/HelloWorld.jer";
         Script parsed = parser.parse(source);
 
         assertNotNull(parsed);
-        assertEquals("examples/com/riguz", parsed.getPackageName());
+        assertEquals("com/riguz/examples", parsed.getPackageName());
         assertEquals("HelloWorld.jer", parsed.getFileName());
     }
 
@@ -24,5 +26,14 @@ public class AntlrParserTest {
     public void throwExceptionIfNotExists() {
         String source = "examples/com/riguz/NotExists.jer";
         Script parsed = parser.parse(source);
+    }
+
+    @Test
+    public void parseImportedTypes() {
+        String source = "com/riguz/examples/HelloWorld.jer";
+        Script parsed = parser.parse(source);
+
+        assertEquals(1, parsed.getImportedTypes().size());
+        assertEquals("jer/lang/System", parsed.getImportedTypes().get(0));
     }
 }

@@ -22,17 +22,17 @@ public class TestGrammarParser {
     @Parameterized.Parameters
     public static Collection<String> cases() {
         return Arrays.asList(
-                "HelloWorld.jer",
-                "EmptyFunction.jer",
-                "LocalVariables.jer",
-                "Control.jer",
-                "Functions.jer",
-                "Abstract.jer",
-                "CircleType.jer",
-                "AllInOne.jer",
-                "Expressions.jer",
-                "Constructors.jer",
-                "Array.jer"
+                "com/riguz/examples/HelloWorld.jer",
+                "com/riguz/examples/EmptyFunction.jer",
+                "com/riguz/examples/LocalVariables.jer",
+                "com/riguz/examples/Control.jer",
+                "com/riguz/examples/Functions.jer",
+                "com/riguz/examples/Abstract.jer",
+                "com/riguz/examples/CircleType.jer",
+                "com/riguz/examples/AllInOne.jer",
+                "com/riguz/examples/Expressions.jer",
+                "com/riguz/examples/Constructors.jer",
+                "com/riguz/examples/Array.jer"
         );
     }
 
