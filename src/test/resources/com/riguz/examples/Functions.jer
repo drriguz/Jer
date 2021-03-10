@@ -1,3 +1,9 @@
 sum(a: Integer, b: Integer) -> Integer = {
     return a.add(b)
 }
+
+main(args: [String) = {
+    a: Foo = new ()
+    a(sayHello)
+    123(add 456,1)
+}

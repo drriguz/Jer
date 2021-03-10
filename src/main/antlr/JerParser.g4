@@ -113,31 +113,26 @@ returnStatement
     : RETURN expression
     ;
 expressionStatement
-    : methodCall
+    : expression '('methodName=IDENTIFIER methodArguments? ')'
+    | instance=IDENTIFIER? '('methodName=IDENTIFIER methodArguments? ')'
     ;
 objectCreation
     : NEW '(' methodArguments? ')'
     ;
-methodCall
-    : instance=IDENTIFIER? '('methodName=IDENTIFIER methodArguments? ')'
-    ;
 methodArguments
     : expression (',' expression)*
     ;
-
 expression
     : primary
-    | expression bop='.'
-        ( methodCall
-        | IDENTIFIER
-        )
-    | methodCall
-    | objectCreation
+    | expression '(' methodName=IDENTIFIER methodArguments? ')'
+    | expression '.' IDENTIFIER
     ;
 primary
     : '(' expression ')'
     | literal
+    | objectCreation
     | IDENTIFIER
+    | instance=IDENTIFIER? '('methodName=IDENTIFIER methodArguments? ')'
     ;
 literal
     : DECIMAL_LITERAL

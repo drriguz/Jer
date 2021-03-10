@@ -17,6 +17,6 @@ public class MethodVisitor extends JerParserBaseVisitor<Method> {
                 .map(p -> new Method.Argument(p.IDENTIFIER().getText(), p.type().getText()))
                 .collect(Collectors.toList());
         String returnType = signature.functionReturnType() == null ? null : signature.functionReturnType().type().getText();
-        return new Method(name, arguments, returnType);
+        return new Method(name, arguments, returnType, null);
     }
 }

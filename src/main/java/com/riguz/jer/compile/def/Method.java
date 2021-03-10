@@ -7,11 +7,16 @@ public class Method {
     private final String name;
     private final List<Argument> arguments;
     private final String returnType;
+    private final List<Statement> statements;
 
-    public Method(String name, List<Argument> arguments, String returnType) {
+    public Method(String name,
+                  List<Argument> arguments,
+                  String returnType,
+                  List<Statement> statements) {
         this.name = name;
         this.arguments = Collections.unmodifiableList(arguments);
         this.returnType = returnType;
+        this.statements = statements;
     }
 
     public String getName() {
