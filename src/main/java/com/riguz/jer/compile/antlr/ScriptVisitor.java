@@ -15,6 +15,6 @@ public class ScriptVisitor extends JerParserBaseVisitor<Script> {
 
     @Override
     public Script visitCompilationUint(CompilationUintContext ctx) {
-        return null;
+        return new Script(fileName, packageName);
     }
 }

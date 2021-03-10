@@ -1,3 +1,5 @@
+package com.riguz.jer.antlr;
+
 import com.riguz.jer.antlr.generated.JerLexer;
 import com.riguz.jer.antlr.generated.JerParser;
 import org.antlr.v4.runtime.*;
