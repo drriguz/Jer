@@ -1,7 +1,5 @@
 lexer grammar JerLexer;
 
-@header { package com.riguz.jer.antlr.generated; }
-
 USE :     'use';
 IF  :     'if';
 ELSE:     'else';

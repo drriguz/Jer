@@ -2,8 +2,6 @@ parser grammar JerParser;
 
 options { tokenVocab=JerLexer; }
 
-@header { package com.riguz.jer.antlr.generated; }
-
 compilationUint
     : importedType* declaration* EOF
     ;
