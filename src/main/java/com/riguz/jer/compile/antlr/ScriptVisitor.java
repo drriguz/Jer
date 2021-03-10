@@ -2,9 +2,11 @@ package com.riguz.jer.compile.antlr;
 
 import com.riguz.jer.antlr.generated.JerParser.*;
 import com.riguz.jer.antlr.generated.JerParserBaseVisitor;
+import com.riguz.jer.compile.def.Method;
 import com.riguz.jer.compile.def.Script;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ScriptVisitor extends JerParserBaseVisitor<Script> {
@@ -21,6 +23,14 @@ public class ScriptVisitor extends JerParserBaseVisitor<Script> {
         List<String> importedTypes = ctx.importedType().stream()
                 .map(i -> i.fullPath().getText())
                 .collect(Collectors.toList());
-        return new Script(fileName, packageName, importedTypes);
+
+        MethodVisitor methodVisitor = new MethodVisitor();
+        List<Method> methods = ctx.declaration().stream()
+                .map(DeclarationContext::methodDeclaration)
+                .filter(Objects::nonNull)
+                .map(d -> d.accept(methodVisitor))
+                .collect(Collectors.toList());
+        return new Script(fileName, packageName, importedTypes, methods);
     }
+
 }
