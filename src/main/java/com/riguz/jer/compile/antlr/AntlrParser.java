@@ -45,9 +45,12 @@ public class AntlrParser implements Parser {
         CharStream charStream = CharStreams.fromStream(
                 new FileInputStream(source));
         JerLexer lexer = new JerLexer(charStream);
-        lexer.addErrorListener(new ErrorListener());
+        lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
         JerParser parser = new JerParser(new CommonTokenStream(lexer));
-        parser.setErrorHandler(new BailErrorStrategy());
+        parser.removeErrorListeners();
+        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+        // parser.setErrorHandler(new BailErrorStrategy());
 
         return parser;
     }

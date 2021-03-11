@@ -11,6 +11,10 @@ STRUCT:   'struct';
 CONST:    'const';
 IS:       'is';
 NEW:      'new';
+PROCESS:  'process';
+FUNCTION: 'function';
+WITH:     'with';
+RUN:      'run';
 
 LPAREN: '(';
 RPAREN: ')';

@@ -1,0 +1,22 @@
+use java/lang/String
+use java/util/DateTime
+
+const pi: Float = 3.1415926f
+const msg: String = "hello world"
+const kb: Integer = 1024
+const success: Boolean = true
+const id: Long = 12345678
+const x: String = null
+
+process sayHello {
+    run println "Hello world!"
+}
+process main with args: [String {
+    run sayHello
+}
+
+abstract Animal {
+    name: String
+    function sayHello() -> String
+    function sayHelloTo(to: Animal) -> String
+}

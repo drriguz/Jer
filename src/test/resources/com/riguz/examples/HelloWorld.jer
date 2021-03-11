@@ -1,5 +1,5 @@
 use jer/lang/System
 
-main(args: [String) = {
-    (println "hello world!")
+process main with args: [String {
+    run println "hello world!"
 }

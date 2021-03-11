@@ -1,7 +1,6 @@
 package com.riguz.jer.compile.antlr;
 
 import com.riguz.jer.compile.Parser;
-import com.riguz.jer.compile.def.Method;
 import com.riguz.jer.compile.def.Script;
 import com.riguz.jer.compile.exception.CompileException;
 import org.junit.Test;
@@ -36,19 +35,5 @@ public class AntlrParserTest {
 
         assertEquals(1, parsed.getImportedTypes().size());
         assertEquals("jer/lang/System", parsed.getImportedTypes().get(0));
-    }
-
-    @Test
-    public void parseStaticMethods() {
-        String source = "com/riguz/examples/HelloWorld.jer";
-        Script parsed = parser.parse(source);
-
-        assertEquals(1, parsed.getStaticMethods().size());
-        Method method = parsed.getStaticMethods().get(0);
-        assertEquals("main", method.getName());
-        assertEquals(1, method.getArguments().size());
-        assertEquals("args", method.getArguments().get(0).getName());
-        assertEquals("[String", method.getArguments().get(0).getType());
-        assertNull(method.getReturnType());
     }
 }

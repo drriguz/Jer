@@ -1,6 +1,0 @@
-main(args: [String) = {
-    arr: [Integer = {1, 2, 3}
-
-    a1: Integer = arr(get 0)
-    arr(set 0, 1)
-}

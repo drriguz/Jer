@@ -3,7 +3,7 @@ parser grammar JerParser;
 options { tokenVocab=JerLexer; }
 
 compilationUint
-    : importedType* declaration* EOF
+    : importedType* declaration+ EOF
     ;
 
 /** imports **/
@@ -16,48 +16,46 @@ fullPath
 
 declaration
     : constantDeclaration
-    | methodDeclaration
+    | processDeclaration
     | abstractDeclaration
     | typeDeclaration
     ;
 
+/** static variable and methods **/
 constantDeclaration
-    : CONST variableDeclaration
+    : CONST IDENTIFIER ':' type ('=' variableInitializer)
     ;
-/** method **/
-methodDeclaration
-    : methodSignature methodImplementation?
-    ;
-methodSignature
-    : IDENTIFIER '(' formalParameters? ')' functionReturnType?
+processDeclaration
+    : PROCESS name=IDENTIFIER (WITH formalParameters)? block
     ;
 formalParameters
     : formalParameter (',' formalParameter)*
     ;
-functionReturnType
-    : TO type
-    ;
-methodImplementation
-    : '=' block
-    ;
 formalParameter
     : IDENTIFIER ':' type
     ;
-/** abstract & type **/
+
+/** abstract & custom type **/
 abstractDeclaration
-    : ABSTRACT TYPE_NAME '{' propertyDeclaration* methodSignature*'}'
+    : ABSTRACT TYPE_NAME '{' propertySignature* functionSignature*'}'
+    ;
+functionSignature
+    : FUNCTION name=IDENTIFIER '(' formalParameters? ')' TO type
+    ;
+functionDeclaration
+    : functionSignature block
     ;
 typeDeclaration
-    : TYPE TYPE_NAME typeAbstractions? '{' propertyDeclaration* constructorDeclaration* methodDeclaration*'}'
+    : TYPE TYPE_NAME typeAbstractions? '{' propertySignature* constructorDeclaration* functionDeclaration*'}'
     ;
 typeAbstractions
     : IS TYPE_NAME (',' TYPE_NAME)*
     ;
-propertyDeclaration
+propertySignature
     : IDENTIFIER ':' type
     ;
 constructorDeclaration
-    : '(' constructorFormalArguments? ')' methodImplementation
+    : '(' constructorFormalArguments? ')' block
     ;
 constructorFormalArguments
     : constructorFormalArgument (',' constructorFormalArgument)*
@@ -65,7 +63,8 @@ constructorFormalArguments
 constructorFormalArgument
     : IDENTIFIER (':' TYPE_NAME)?
     ;
-/** type & variable **/
+
+/** data type & variable **/
 type
     : TYPE_NAME
     | arrayType
@@ -73,7 +72,27 @@ type
 arrayType
     : '[' type
     ;
-variableDeclaration
+
+
+/** statements **/
+block
+    : '{' statement* '}'
+    ;
+
+statement
+    : localVariableDeclaration
+    | embeddedStatement
+    ;
+embeddedStatement
+    : block
+    | assignStatement
+    | processStatement
+    | selectionStatement
+    | loopStatement
+    | returnStatement
+    ;
+
+localVariableDeclaration
     : IDENTIFIER ':' type ('=' variableInitializer)?
     ;
 variableInitializer
@@ -83,56 +102,38 @@ variableInitializer
 arrayInitializer
     : '{' variableInitializer (',' variableInitializer)* '}'
     ;
-
-block
-    : '{' statement* '}'
-    ;
-statement
-    : variableDeclaration
-    | embeddedStatement
-    ;
-
-embeddedStatement
-    : block
-    | assignment
-    | expressionStatement
-    | selectionStatement
-    | loopStatement
-    | returnStatement
-    ;
-assignment
+assignStatement
     : IDENTIFIER '=' expression
     ;
 selectionStatement
-    : IF '(' expression ')' statement (ELSE statement)?
+    : IF '(' expression ')' embeddedStatement (ELSE embeddedStatement)?
     ;
 loopStatement
-    : WHILE '(' expression ')' statement
+    : WHILE '(' expression ')' embeddedStatement
+    ;
+processStatement
+    : RUN IDENTIFIER expressionList?
+    ;
+expressionList
+    : expression (',' expression)*
     ;
 returnStatement
     : RETURN expression
     ;
-expressionStatement
-    : expression '('methodName=IDENTIFIER methodArguments? ')'
-    | instance=IDENTIFIER? '('methodName=IDENTIFIER methodArguments? ')'
+
+/** expressions **/
+expression
+    : literal
+    | expression '.' IDENTIFIER '(' expressionList? ')' // function call
+    | expression '[' IDENTIFIER ']'                     // property
+    | variableValue
+    | objectCreation
+    ;
+variableValue
+    : IDENTIFIER
     ;
 objectCreation
-    : NEW '(' methodArguments? ')'
-    ;
-methodArguments
-    : expression (',' expression)*
-    ;
-expression
-    : primary
-    | expression '(' methodName=IDENTIFIER methodArguments? ')'
-    | expression '.' IDENTIFIER
-    ;
-primary
-    : '(' expression ')'
-    | literal
-    | objectCreation
-    | IDENTIFIER
-    | instance=IDENTIFIER? '('methodName=IDENTIFIER methodArguments? ')'
+    : NEW TYPE_NAME '(' expressionList? ')'
     ;
 literal
     : DECIMAL_LITERAL
