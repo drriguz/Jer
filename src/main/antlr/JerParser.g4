@@ -124,6 +124,7 @@ returnStatement
 /** expressions **/
 expression
     : literal
+    | THIS
     | expression '.' IDENTIFIER '(' expressionList? ')' // function call
     | expression '[' IDENTIFIER ']'                     // property
     | variableValue

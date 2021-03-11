@@ -13,10 +13,34 @@ process sayHello {
 }
 process main with args: [String {
     run sayHello
+
+    i: Integer = 0
+    while(i.lessThan(10)) {
+        i = i.increase()
+        run sayHello
+    }
 }
 
 abstract Animal {
     name: String
     function sayHello() -> String
     function sayHelloTo(to: Animal) -> String
+    function isOld() -> Boolean
+}
+
+type Dog is Animal {
+    age: Integer
+    (name, age) {
+
+    }
+
+    function sayHello() -> String {
+        return "Hello world!"
+    }
+
+    function isOld() -> Boolean {
+        if(this[age].greaterThan(10))
+            return true
+        else return false
+    }
 }

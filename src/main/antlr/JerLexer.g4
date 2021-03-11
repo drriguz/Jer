@@ -15,6 +15,7 @@ PROCESS:  'process';
 FUNCTION: 'function';
 WITH:     'with';
 RUN:      'run';
+THIS:     'this';
 
 LPAREN: '(';
 RPAREN: ')';
