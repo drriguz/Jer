@@ -4,6 +4,7 @@ import com.riguz.jer.antlr.generated.JerParser.*;
 import com.riguz.jer.antlr.generated.JerParserBaseVisitor;
 import com.riguz.jer.compile.def.Script;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,13 @@ public class ScriptVisitor extends JerParserBaseVisitor<Script> {
                 .map(i -> i.fullPath().getText())
                 .collect(Collectors.toList());
 
-        return new Script(fileName, packageName, importedTypes);
+        return new Script(fileName,
+                packageName,
+                importedTypes,
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList());
     }
 
 }

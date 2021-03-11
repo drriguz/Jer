@@ -31,8 +31,6 @@ EAUQL : '=';
 
 TO    : '->';
 
-
-NULL_LITERAL:      'null';
 BOOL_LITERAL:      'true' | 'false';
 DECIMAL_LITERAL:   '0' | [1-9] Digits?;
 FLOAT_LITERAL:     Digits '.' Digits? 'f';

@@ -6,7 +6,6 @@ const msg: String = "hello world"
 const kb: Integer = 1024
 const success: Boolean = true
 const id: Long = 12345678
-const x: String = null
 
 process sayHello {
     run println "Hello world!"

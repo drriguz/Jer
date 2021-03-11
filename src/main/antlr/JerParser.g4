@@ -23,7 +23,7 @@ declaration
 
 /** static variable and methods **/
 constantDeclaration
-    : CONST IDENTIFIER ':' type ('=' variableInitializer)
+    : CONST variableDeclaration
     ;
 processDeclaration
     : PROCESS name=IDENTIFIER (WITH formalParameters)? block
@@ -80,7 +80,7 @@ block
     ;
 
 statement
-    : localVariableDeclaration
+    : variableDeclaration
     | embeddedStatement
     ;
 embeddedStatement
@@ -92,8 +92,8 @@ embeddedStatement
     | returnStatement
     ;
 
-localVariableDeclaration
-    : IDENTIFIER ':' type ('=' variableInitializer)?
+variableDeclaration
+    : IDENTIFIER ':' type ('=' variableInitializer)
     ;
 variableInitializer
     : arrayInitializer
@@ -142,5 +142,4 @@ literal
     | CHAR_LITERAL
     | STRING_LITERAL
     | BOOL_LITERAL
-    | NULL_LITERAL
     ;
