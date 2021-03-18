@@ -93,7 +93,7 @@ embeddedStatement
     ;
 
 variableDeclaration
-    : IDENTIFIER ':' type ('=' variableInitializer)
+    : IDENTIFIER ':' type '=' variableInitializer
     ;
 variableInitializer
     : arrayInitializer
@@ -124,14 +124,14 @@ returnStatement
 /** expressions **/
 expression
     : literal
-    | THIS
     | expression '.' IDENTIFIER '(' expressionList? ')' // function call
     | expression '[' IDENTIFIER ']'                     // property
-    | variableValue
+    | variableReference
     | objectCreation
     ;
-variableValue
+variableReference
     : IDENTIFIER
+    | THIS
     ;
 objectCreation
     : NEW TYPE_NAME '(' expressionList? ')'

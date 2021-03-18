@@ -1,11 +1,19 @@
 package com.riguz.jer.compile.def;
 
-public class Function {
-    private final String name;
-    private final String returnType;
+import java.util.List;
 
-    public Function(String name, String returnType) {
-        this.name = name;
-        this.returnType = returnType;
+public class Function extends FunctionSignature {
+    private final Block block;
+
+    public Function(String name,
+                    List<Parameter> formalParameters,
+                    String returnType,
+                    Block block) {
+        super(name, formalParameters, returnType);
+        this.block = block;
+    }
+
+    public Block getBlock() {
+        return block;
     }
 }

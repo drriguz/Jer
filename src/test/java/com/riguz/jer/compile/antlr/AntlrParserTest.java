@@ -18,6 +18,7 @@ public class AntlrParserTest {
         Script parsed = parser.parse(source);
 
         assertNotNull(parsed);
+        assertNotNull(parsed);
         assertEquals("com/riguz/examples", parsed.getPackageName());
         assertEquals("HelloWorld.jer", parsed.getFileName());
     }
