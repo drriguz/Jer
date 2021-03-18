@@ -1,0 +1,5 @@
+const pi: Float = 3.1415926f
+const msg: String = "hello world"
+const kb: Integer = 1024
+const success: Boolean = true
+const id: Long = 12345678

@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
 
-public class AntlrParserTest {
+public class TestParsePackageAndImportedTypes {
     final Parser parser = new AntlrParser(Paths.get("src/test/resources"));
 
     @Test

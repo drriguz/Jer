@@ -1,5 +1,7 @@
 package com.riguz.jer.compile.def;
 
+import com.riguz.jer.compile.def.statement.VariableDeclaration;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -7,7 +9,7 @@ public class Script {
     private final String fileName;
     private final String packageName;
     private final List<String> importedTypes;
-    private final List<Constant> constants;
+    private final List<VariableDeclaration> constants;
     private final List<Process> processes;
     private final List<Abstract> abstracts;
     private final List<Type> types;
@@ -15,7 +17,7 @@ public class Script {
     public Script(String fileName,
                   String packageName,
                   List<String> importedTypes,
-                  List<Constant> constants,
+                  List<VariableDeclaration> constants,
                   List<Process> processes,
                   List<Abstract> abstracts,
                   List<Type> types) {
@@ -40,7 +42,7 @@ public class Script {
         return importedTypes;
     }
 
-    public List<Constant> getConstants() {
+    public List<VariableDeclaration> getConstants() {
         return constants;
     }
 
