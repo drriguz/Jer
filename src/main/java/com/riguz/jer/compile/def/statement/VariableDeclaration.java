@@ -60,8 +60,8 @@ public class VariableDeclaration extends Statement {
             return arrayInitializer;
         }
 
-        public Expression getValue() {
-            return value;
+        public <T extends Expression> T getValue() {
+            return (T) value;
         }
     }
 }

@@ -33,7 +33,7 @@ TO    : '->';
 
 BOOL_LITERAL:      'true' | 'false';
 DECIMAL_LITERAL:   '0' | [1-9] Digits?;
-FLOAT_LITERAL:     Digits '.' Digits? 'f';
+FLOAT_LITERAL:     Digits '.' Digits?;
 CHAR_LITERAL:      '\'' (~['\\\r\n] | EscapeSequence) '\'';
 STRING_LITERAL :   '"' (~["\\\r\n] | EscapeSequence)* '"';
 

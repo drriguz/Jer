@@ -1,11 +1,15 @@
 use java/lang/String
 use java/util/DateTime
 
-const pi: Float = 3.1415926f
-const msg: String = "hello world"
+const b: Byte = 19
+const st: Short = 111
 const kb: Integer = 1024
-const success: Boolean = true
 const id: Long = 12345678
+const db: Double = 581216732.323433
+const pi: Float = 3.1415926
+const success: Boolean = true
+const ch: Char = 'A'
+const msg: String = "hello\n world!"
 
 process sayHello {
     run println "Hello world!"
