@@ -123,8 +123,9 @@ returnStatement
 
 /** expressions **/
 expression
-    : literal
-    | expression '.' IDENTIFIER '(' expressionList? ')' // function call
+    : '(' expression ')'
+    | literal
+    | expression '|' IDENTIFIER '(' expressionList? ')' // function call
     | expression '[' IDENTIFIER ']'                     // property
     | variableReference
     | objectCreation

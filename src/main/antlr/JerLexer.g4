@@ -28,6 +28,7 @@ COLON : ':';
 COMMA : ',';
 DOT   : '.';
 EAUQL : '=';
+PIPE  : '|';
 
 TO    : '->';
 

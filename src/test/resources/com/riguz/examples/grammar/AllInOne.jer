@@ -22,8 +22,8 @@ process main with args: [String {
     run sayHello
 
     i: Integer = 0
-    while(i.lessThan(10)) {
-        i = i.increase()
+    while(i|lessThan(10)) {
+        i = i|increase()
         run sayHello
     }
 }
@@ -46,7 +46,7 @@ type Dog is Animal {
     }
 
     function isOld() -> Boolean {
-        if(this[age].greaterThan(10))
+        if(this[age]|greaterThan(10))
             return true
         else return false
     }

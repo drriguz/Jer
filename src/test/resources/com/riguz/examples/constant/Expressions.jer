@@ -1,0 +1,2 @@
+const msg: String = "hello"|append("world")
+const sum: Integer = 1|add(2)
