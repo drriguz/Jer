@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class TestParseConstantDeclaration {
+public class TestParsePrimitiveConstantDeclaration {
     final Parser parser = new AntlrParser(Paths.get("src/test/resources"));
     List<VariableDeclaration> constants;
 
