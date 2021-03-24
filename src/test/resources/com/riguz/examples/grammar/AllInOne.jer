@@ -11,6 +11,10 @@ const success: Boolean = true
 const ch: Char = 'A'
 const msg: String = "hello\n world!"
 
+const arri: [Integer = {1, 2, 3, 4, 5}
+const arrstr: [String = {"hello", "world"}
+const arr2d: [[Integer = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}
+
 process sayHello {
     run println "Hello world!"
 }
