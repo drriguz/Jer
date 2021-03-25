@@ -123,10 +123,10 @@ returnStatement
 
 /** expressions **/
 expression
-    : '(' expression ')'
+    : nested='(' expression ')'
     | literal
-    | expression '|' IDENTIFIER '(' expressionList? ')' // function call
-    | expression '[' IDENTIFIER ']'                     // property
+    | expression functionCall='|' IDENTIFIER '(' expressionList? ')' // function call
+    | expression propertyCall='[' IDENTIFIER ']'                     // property
     | variableReference
     | objectCreation
     ;
