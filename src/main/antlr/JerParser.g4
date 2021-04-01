@@ -81,15 +81,16 @@ block
 
 statement
     : variableDeclaration
-    | embeddedStatement
-    ;
-embeddedStatement
-    : block
     | assignStatement
     | processStatement
     | selectionStatement
     | loopStatement
     | returnStatement
+    ;
+
+nestedBlock
+    : statement
+    | '{' statement* '}'
     ;
 
 variableDeclaration
@@ -106,10 +107,10 @@ assignStatement
     : IDENTIFIER '=' expression
     ;
 selectionStatement
-    : IF '(' expression ')' embeddedStatement (ELSE embeddedStatement)?
+    : IF '(' expression ')' nestedBlock (ELSE nestedBlock)?
     ;
 loopStatement
-    : WHILE '(' expression ')' embeddedStatement
+    : WHILE '(' expression ')' nestedBlock
     ;
 processStatement
     : RUN IDENTIFIER expressionList?

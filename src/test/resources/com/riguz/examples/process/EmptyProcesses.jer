@@ -1,0 +1,13 @@
+use jer/lang/System
+
+process empty {
+
+}
+
+process foo with args: [String {
+
+}
+
+process bar with args: [String, count: Integer {
+
+}

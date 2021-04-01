@@ -4,16 +4,19 @@ import com.riguz.jer.antlr.generated.JerParser.*;
 import com.riguz.jer.antlr.generated.JerParserBaseVisitor;
 import com.riguz.jer.compile.def.Script;
 import com.riguz.jer.compile.def.statement.VariableDeclaration;
+import com.riguz.jer.compile.def.Process;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class ScriptVisitor extends JerParserBaseVisitor<Script> {
     private final String fileName;
     private final String packageName;
     private final VariableDeclarationVisitor variableDeclarationVisitor = new VariableDeclarationVisitor();
+    private final ProcessVisitor processVisitor = new ProcessVisitor();
 
     public ScriptVisitor(String fileName, String packageName) {
         this.fileName = fileName;
@@ -27,18 +30,20 @@ public class ScriptVisitor extends JerParserBaseVisitor<Script> {
                 .collect(Collectors.toList());
 
         List<VariableDeclaration> constants = new ArrayList<>();
+        List<Process> processes = new ArrayList<>();
         ctx.declaration().forEach(declarationContext -> {
             if (declarationContext.constantDeclaration() != null)
                 constants.add(declarationContext.constantDeclaration().accept(variableDeclarationVisitor));
+            else if (declarationContext.processDeclaration() != null)
+                processes.add(declarationContext.processDeclaration().accept(processVisitor));
         });
 
         return new Script(fileName,
                 packageName,
                 importedTypes,
                 constants,
-                Collections.emptyList(),
+                processes,
                 Collections.emptyList(),
                 Collections.emptyList());
     }
-
 }

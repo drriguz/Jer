@@ -50,4 +50,11 @@ type Dog is Animal {
             return true
         else return false
     }
+
+    function toString() -> String {
+        if(age|le(0)) {
+            msg: String = "animal not born yet"
+            return "N/A"
+        }
+    }
 }

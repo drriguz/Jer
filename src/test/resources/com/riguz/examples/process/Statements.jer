@@ -1,0 +1,8 @@
+use jer/lang/System
+
+process foo {
+    foo: Integer = 10
+    bar = 20|add(10)
+    run sum 1, 2, 3
+    run sayHello
+}
