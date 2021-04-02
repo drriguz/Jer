@@ -6,6 +6,7 @@ import com.riguz.jer.compile.def.Statement;
 import com.riguz.jer.compile.def.expression.FunctionCall;
 import com.riguz.jer.compile.def.expression.Literal;
 import com.riguz.jer.compile.def.statement.AssignStatement;
+import com.riguz.jer.compile.def.statement.ProcessStatement;
 import com.riguz.jer.compile.def.statement.VariableDeclaration;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,5 +46,14 @@ public class TestParseStatements {
         assertEquals("20", ((Literal) v.getInstance()).getValue());
         assertEquals(1, v.getArguments().size());
         assertEquals("10", ((Literal) v.getArguments().get(0)).getValue());
+    }
+
+    @Test
+    public void parseRunProcessStatement() {
+        ProcessStatement s = (ProcessStatement) statements.get(2);
+
+        assertEquals("sum", s.getName());
+        assertEquals(3, s.getArguments().size());
+        assertEquals("1", ((Literal) s.getArguments().get(0)).getValue());
     }
 }
