@@ -1,6 +1,7 @@
 package com.riguz.jer.compile.def;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Function extends FunctionSignature {
     private final Block block;
@@ -15,5 +16,18 @@ public class Function extends FunctionSignature {
 
     public Block getBlock() {
         return block;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Function function = (Function) o;
+        return Objects.equals(block, function.block);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(block);
     }
 }

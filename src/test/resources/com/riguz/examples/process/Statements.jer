@@ -5,4 +5,12 @@ process foo {
     bar = 20|add(10)
     run sum 1, 2, 3
     run sayHello
+    if(foo|eq(10))
+        run sayHello
+
+    if(foo|eq(10)) {
+        run print "foo is 10"
+    } else {
+        run print "foo is not 10"
+    }
 }

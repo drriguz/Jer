@@ -89,8 +89,8 @@ statement
     ;
 
 nestedBlock
-    : statement
-    | '{' statement* '}'
+    : singleLine=statement
+    | '{' statement+ '}'
     ;
 
 variableDeclaration
@@ -107,7 +107,7 @@ assignStatement
     : IDENTIFIER '=' expression
     ;
 selectionStatement
-    : IF '(' expression ')' nestedBlock (ELSE nestedBlock)?
+    : IF '(' expression ')' ifStatement=nestedBlock (ELSE elseStatement=nestedBlock)?
     ;
 loopStatement
     : WHILE '(' expression ')' nestedBlock

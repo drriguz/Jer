@@ -1,13 +1,13 @@
 package com.riguz.jer.compile.antlr;
 
-import com.riguz.jer.antlr.generated.JerParser.AssignStatementContext;
-import com.riguz.jer.antlr.generated.JerParser.ProcessStatementContext;
-import com.riguz.jer.antlr.generated.JerParser.StatementContext;
+import com.riguz.jer.antlr.generated.JerParser.*;
 import com.riguz.jer.antlr.generated.JerParserBaseVisitor;
 import com.riguz.jer.compile.def.Expression;
 import com.riguz.jer.compile.def.Statement;
 import com.riguz.jer.compile.def.statement.AssignStatement;
+import com.riguz.jer.compile.def.statement.NestedBlock;
 import com.riguz.jer.compile.def.statement.ProcessStatement;
+import com.riguz.jer.compile.def.statement.SelectionStatement;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +25,8 @@ public class StatementVisitor extends JerParserBaseVisitor<Statement> {
             return visitAssignStatement(ctx.assignStatement());
         else if (ctx.processStatement() != null)
             return visitProcessStatement(ctx.processStatement());
+        else if (ctx.selectionStatement() != null)
+            return visitSelectionStatement(ctx.selectionStatement());
         return null;
     }
 
@@ -46,5 +48,32 @@ public class StatementVisitor extends JerParserBaseVisitor<Statement> {
                                 .collect(Collectors.toList());
         return new ProcessStatement(ctx.IDENTIFIER().getText(),
                 arguments);
+    }
+
+    @Override
+    public Statement visitSelectionStatement(SelectionStatementContext ctx) {
+        return new SelectionStatement(
+                ctx.expression().accept(expressionVisitor),
+                visitNestedBlock(ctx.ifStatement),
+                ctx.ELSE() == null ?
+                        null :
+                        visitNestedBlock(ctx.elseStatement)
+        );
+    }
+
+    @Override
+    public Statement visitNestedBlock(NestedBlockContext ctx) {
+        if (ctx.singleLine != null)
+            return ctx.singleLine.accept(this);
+        else {
+            List<Statement> statements = ctx.statement()
+                    .stream()
+                    .map(s -> s.accept(this))
+                    .collect(Collectors.toList());
+            if (statements.size() == 1)
+                return statements.get(0);
+            else
+                return new NestedBlock(statements);
+        }
     }
 }

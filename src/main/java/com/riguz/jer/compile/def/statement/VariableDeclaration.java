@@ -5,6 +5,7 @@ import com.riguz.jer.compile.def.Statement;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class VariableDeclaration extends Statement {
     private final String variableName;
@@ -63,5 +64,35 @@ public class VariableDeclaration extends Statement {
         public <T extends Expression> T getValue() {
             return (T) value;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            VariableInitializer that = (VariableInitializer) o;
+            return isArray == that.isArray &&
+                    Objects.equals(arrayInitializer, that.arrayInitializer) &&
+                    Objects.equals(value, that.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(isArray, arrayInitializer, value);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VariableDeclaration that = (VariableDeclaration) o;
+        return Objects.equals(variableName, that.variableName) &&
+                Objects.equals(type, that.type) &&
+                Objects.equals(variableInitializer, that.variableInitializer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(variableName, type, variableInitializer);
     }
 }

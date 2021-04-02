@@ -4,6 +4,7 @@ import com.riguz.jer.compile.def.statement.VariableDeclaration;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Script {
     private final String fileName;
@@ -56,5 +57,24 @@ public class Script {
 
     public List<Type> getTypes() {
         return types;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Script script = (Script) o;
+        return Objects.equals(fileName, script.fileName) &&
+                Objects.equals(packageName, script.packageName) &&
+                Objects.equals(importedTypes, script.importedTypes) &&
+                Objects.equals(constants, script.constants) &&
+                Objects.equals(processes, script.processes) &&
+                Objects.equals(abstracts, script.abstracts) &&
+                Objects.equals(types, script.types);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fileName, packageName, importedTypes, constants, processes, abstracts, types);
     }
 }

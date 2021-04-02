@@ -1,20 +1,25 @@
 package com.riguz.jer.compile.antlr;
 
 import com.riguz.jer.compile.Parser;
+import com.riguz.jer.compile.def.Expression;
 import com.riguz.jer.compile.def.Script;
 import com.riguz.jer.compile.def.Statement;
 import com.riguz.jer.compile.def.expression.FunctionCall;
 import com.riguz.jer.compile.def.expression.Literal;
 import com.riguz.jer.compile.def.statement.AssignStatement;
 import com.riguz.jer.compile.def.statement.ProcessStatement;
+import com.riguz.jer.compile.def.statement.SelectionStatement;
 import com.riguz.jer.compile.def.statement.VariableDeclaration;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class TestParseStatements {
     final Parser parser = new AntlrParser(Paths.get("src/test/resources"));
@@ -60,5 +65,23 @@ public class TestParseStatements {
 
         assertEquals("sayHello", s1.getName());
         assertEquals(0, s1.getArguments().size());
+    }
+
+    @Test
+    public void parseSelectionStatement() {
+        SelectionStatement s = (SelectionStatement) statements.get(4);
+
+        FunctionCall c = (FunctionCall) s.getCondition();
+        assertEquals("eq", c.getFunctionName());
+        assertNull(s.getOpposite());
+        assertEquals(new ProcessStatement("sayHello", Collections.emptyList()),
+                s.getStatement());
+
+        SelectionStatement s1 = (SelectionStatement) statements.get(5);
+
+        FunctionCall c1 = (FunctionCall) s1.getCondition();
+        assertEquals("eq", c1.getFunctionName());
+        assertEquals(new ProcessStatement("print", Arrays.asList(new Literal("foo is 10"))),
+                s1.getStatement());
     }
 }

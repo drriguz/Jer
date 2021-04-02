@@ -3,6 +3,8 @@ package com.riguz.jer.compile.def.expression;
 import com.riguz.jer.compile.def.Expression;
 import org.apache.commons.text.StringEscapeUtils;
 
+import java.util.Objects;
+
 public class Literal extends Expression {
     private final String value;
 
@@ -51,5 +53,18 @@ public class Literal extends Expression {
 
     public String asString() {
         return StringEscapeUtils.unescapeJava(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Literal literal = (Literal) o;
+        return Objects.equals(value, literal.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }
