@@ -55,5 +55,10 @@ public class TestParseStatements {
         assertEquals("sum", s.getName());
         assertEquals(3, s.getArguments().size());
         assertEquals("1", ((Literal) s.getArguments().get(0)).getValue());
+
+        ProcessStatement s1 = (ProcessStatement) statements.get(3);
+
+        assertEquals("sayHello", s1.getName());
+        assertEquals(0, s1.getArguments().size());
     }
 }
