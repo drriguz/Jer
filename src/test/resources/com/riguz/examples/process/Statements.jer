@@ -17,4 +17,6 @@ process foo {
     while(foo|gt(0)) {
         foo = foo|minus(1)
     }
+
+    return 1
 }

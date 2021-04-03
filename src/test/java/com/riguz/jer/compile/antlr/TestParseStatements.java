@@ -97,4 +97,11 @@ public class TestParseStatements {
                                 Collections.singletonList(new Literal("1")))),
                 s.getStatement());
     }
+
+    @Test
+    public void parseReturnStatement() {
+        ReturnStatement s = (ReturnStatement) statements.get(7);
+
+        assertEquals(new Literal("1"), s.getReturnValue());
+    }
 }

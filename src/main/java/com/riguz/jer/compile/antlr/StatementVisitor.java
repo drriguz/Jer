@@ -26,7 +26,10 @@ public class StatementVisitor extends JerParserBaseVisitor<Statement> {
             return visitSelectionStatement(ctx.selectionStatement());
         else if (ctx.loopStatement() != null)
             return visitLoopStatement(ctx.loopStatement());
-        return null;
+        else if (ctx.returnStatement() != null)
+            return visitReturnStatement(ctx.returnStatement());
+        else
+            throw new IllegalArgumentException("Unexpected statement:" + ctx.getText());
     }
 
     @Override
@@ -80,5 +83,10 @@ public class StatementVisitor extends JerParserBaseVisitor<Statement> {
     public Statement visitLoopStatement(LoopStatementContext ctx) {
         return new LoopStatement(ctx.expression().accept(expressionVisitor),
                 visitNestedBlock(ctx.nestedBlock()));
+    }
+
+    @Override
+    public Statement visitReturnStatement(ReturnStatementContext ctx) {
+        return new ReturnStatement(ctx.expression().accept(expressionVisitor));
     }
 }
