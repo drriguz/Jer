@@ -44,6 +44,9 @@ public class TestParseExpressions {
         assertEquals("append", f.getFunctionName());
         assertEquals(1, f.getArguments().size());
         assertEquals("world", ((Literal) f.getArguments().get(0)).getValue());
+
+        VariableInitializer v1 = constants.get(6).getVariableInitializer();
+        assertTrue(((FunctionCall) v1.getValue()).getArguments().isEmpty());
     }
 
     @Test
@@ -67,7 +70,7 @@ public class TestParseExpressions {
         assertEquals(1, f.getArguments().size());
         assertEquals("3", ((Literal) f.getArguments().get(0)).getValue());
 
-        FunctionCall i = (FunctionCall)f.getInstance();
+        FunctionCall i = (FunctionCall) f.getInstance();
         assertEquals("add", i.getFunctionName());
         assertEquals(1, i.getArguments().size());
         assertEquals("2", ((Literal) i.getArguments().get(0)).getValue());

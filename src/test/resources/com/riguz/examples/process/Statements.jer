@@ -13,4 +13,8 @@ process foo {
     } else {
         run print "foo is not 10"
     }
+
+    while(foo|gt(0)) {
+        foo = foo|minus(1)
+    }
 }

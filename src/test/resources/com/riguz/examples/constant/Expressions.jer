@@ -4,3 +4,4 @@ const msg: String = "hello"|append("world")
 const personName: String = person[name]
 const nested: Integer = (1|add(2))|add(3)
 const obj: Person = new Person("riguz", 18)
+const p: Integer = foo|increase()

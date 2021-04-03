@@ -6,10 +6,8 @@ import com.riguz.jer.compile.def.Script;
 import com.riguz.jer.compile.def.Statement;
 import com.riguz.jer.compile.def.expression.FunctionCall;
 import com.riguz.jer.compile.def.expression.Literal;
-import com.riguz.jer.compile.def.statement.AssignStatement;
-import com.riguz.jer.compile.def.statement.ProcessStatement;
-import com.riguz.jer.compile.def.statement.SelectionStatement;
-import com.riguz.jer.compile.def.statement.VariableDeclaration;
+import com.riguz.jer.compile.def.expression.VariableReference;
+import com.riguz.jer.compile.def.statement.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -83,5 +81,20 @@ public class TestParseStatements {
         assertEquals("eq", c1.getFunctionName());
         assertEquals(new ProcessStatement("print", Arrays.asList(new Literal("foo is 10"))),
                 s1.getStatement());
+    }
+
+    @Test
+    public void parseLoopStatement() {
+        LoopStatement s = (LoopStatement) statements.get(6);
+
+        FunctionCall c = (FunctionCall) s.getCondition();
+        assertEquals(new FunctionCall(new VariableReference("foo", false),
+                "gt",
+                Collections.singletonList(new Literal("0"))), c);
+        assertEquals(new AssignStatement("foo",
+                        new FunctionCall(new VariableReference("foo", false),
+                                "minus",
+                                Collections.singletonList(new Literal("1")))),
+                s.getStatement());
     }
 }

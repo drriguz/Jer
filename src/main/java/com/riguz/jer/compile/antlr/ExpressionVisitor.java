@@ -6,6 +6,7 @@ import com.riguz.jer.antlr.generated.JerParserBaseVisitor;
 import com.riguz.jer.compile.def.Expression;
 import com.riguz.jer.compile.def.expression.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,8 @@ public class ExpressionVisitor extends JerParserBaseVisitor<Expression> {
     }
 
     private List<Expression> extractArguments(JerParser.ExpressionListContext ctx) {
+        if (ctx == null)
+            return Collections.emptyList();
         return ctx.expression()
                 .stream()
                 .map(e -> e.accept(this))

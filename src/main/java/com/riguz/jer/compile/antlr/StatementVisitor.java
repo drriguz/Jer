@@ -4,10 +4,7 @@ import com.riguz.jer.antlr.generated.JerParser.*;
 import com.riguz.jer.antlr.generated.JerParserBaseVisitor;
 import com.riguz.jer.compile.def.Expression;
 import com.riguz.jer.compile.def.Statement;
-import com.riguz.jer.compile.def.statement.AssignStatement;
-import com.riguz.jer.compile.def.statement.NestedBlock;
-import com.riguz.jer.compile.def.statement.ProcessStatement;
-import com.riguz.jer.compile.def.statement.SelectionStatement;
+import com.riguz.jer.compile.def.statement.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +24,8 @@ public class StatementVisitor extends JerParserBaseVisitor<Statement> {
             return visitProcessStatement(ctx.processStatement());
         else if (ctx.selectionStatement() != null)
             return visitSelectionStatement(ctx.selectionStatement());
+        else if (ctx.loopStatement() != null)
+            return visitLoopStatement(ctx.loopStatement());
         return null;
     }
 
@@ -75,5 +74,11 @@ public class StatementVisitor extends JerParserBaseVisitor<Statement> {
             else
                 return new NestedBlock(statements);
         }
+    }
+
+    @Override
+    public Statement visitLoopStatement(LoopStatementContext ctx) {
+        return new LoopStatement(ctx.expression().accept(expressionVisitor),
+                visitNestedBlock(ctx.nestedBlock()));
     }
 }
