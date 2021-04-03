@@ -1,0 +1,16 @@
+abstract Empty {
+}
+
+abstract Properties {
+    name: String
+}
+abstract Functions {
+    function sayHello() -> String
+}
+
+abstract Animal {
+    name: String
+    function sayHello() -> String
+    function sayHelloTo(to: Animal) -> String
+    function isOld() -> Boolean
+}
