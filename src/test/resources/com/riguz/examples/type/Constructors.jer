@@ -1,0 +1,12 @@
+type Dog is Animal {
+    age: Integer
+    () {
+        age = 0
+    }
+    (name, age) {
+
+    }
+    (name, age, reCalculateAge: Boolean) {
+
+    }
+}

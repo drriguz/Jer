@@ -1,14 +1,14 @@
 package com.riguz.jer.compile.antlr;
 
-import com.riguz.jer.antlr.generated.JerParser.*;
+import com.riguz.jer.antlr.generated.JerParser.CompilationUintContext;
 import com.riguz.jer.antlr.generated.JerParserBaseVisitor;
 import com.riguz.jer.compile.def.Abstract;
-import com.riguz.jer.compile.def.Script;
-import com.riguz.jer.compile.def.statement.VariableDeclaration;
 import com.riguz.jer.compile.def.Process;
+import com.riguz.jer.compile.def.Script;
+import com.riguz.jer.compile.def.Type;
+import com.riguz.jer.compile.def.statement.VariableDeclaration;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +19,7 @@ public class ScriptVisitor extends JerParserBaseVisitor<Script> {
     private final VariableDeclarationVisitor variableDeclarationVisitor = new VariableDeclarationVisitor();
     private final ProcessVisitor processVisitor = new ProcessVisitor();
     private final AbstractVisitor abstractVisitor = new AbstractVisitor();
+    private final TypeVisitor typeVisitor = new TypeVisitor();
 
     public ScriptVisitor(String fileName, String packageName) {
         this.fileName = fileName;
@@ -34,14 +35,19 @@ public class ScriptVisitor extends JerParserBaseVisitor<Script> {
         List<VariableDeclaration> constants = new ArrayList<>();
         List<Process> processes = new ArrayList<>();
         List<Abstract> abstracts = new ArrayList<>();
+        List<Type> types = new ArrayList<>();
 
-        ctx.declaration().forEach(declarationContext -> {
-            if (declarationContext.constantDeclaration() != null)
-                constants.add(declarationContext.constantDeclaration().accept(variableDeclarationVisitor));
-            else if (declarationContext.processDeclaration() != null)
-                processes.add(declarationContext.processDeclaration().accept(processVisitor));
-            else if (declarationContext.abstractDeclaration() != null)
-                abstracts.add(declarationContext.abstractDeclaration().accept(abstractVisitor));
+        ctx.declaration().forEach(c -> {
+            if (c.constantDeclaration() != null)
+                constants.add(c.constantDeclaration().accept(variableDeclarationVisitor));
+            else if (c.processDeclaration() != null)
+                processes.add(c.processDeclaration().accept(processVisitor));
+            else if (c.abstractDeclaration() != null)
+                abstracts.add(c.abstractDeclaration().accept(abstractVisitor));
+            else if (c.typeDeclaration() != null)
+                types.add(c.typeDeclaration().accept(typeVisitor));
+            else
+                throw new IllegalArgumentException("Unexpected declaration:" + c.getText());
         });
 
         return new Script(fileName,
@@ -50,6 +56,6 @@ public class ScriptVisitor extends JerParserBaseVisitor<Script> {
                 constants,
                 processes,
                 abstracts,
-                Collections.emptyList());
+                types);
     }
 }

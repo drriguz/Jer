@@ -1,0 +1,20 @@
+type Empty {
+}
+
+type PureProperties {
+    age: Integer
+}
+
+type PureFunctions {
+    function sayHello() -> String {
+        return "Hello world!"
+    }
+}
+
+type Complex is A,B,C {
+    age: Integer
+    function sayHello() -> String {
+        return "Hello world!"
+    }
+}
+
