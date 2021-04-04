@@ -2,7 +2,7 @@ package com.riguz.jer.antlr;
 
 import com.riguz.jer.compile.Parser;
 import com.riguz.jer.compile.antlr.AntlrParser;
-import com.riguz.jer.compile.exception.CompileException;
+import com.riguz.jer.compile.exception.ParseException;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +33,7 @@ public class TestGrammarParserWithBadSyntax {
     }
 
     @Test(expected = ParseCancellationException.class)
-    public void parseSource() throws IOException {
+    public void parseSource() throws ParseException {
         Parser parser = new AntlrParser(Paths.get("src/test/resources"));
         parser.parse(source);
     }

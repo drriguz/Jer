@@ -8,6 +8,7 @@ import com.riguz.jer.compile.def.expression.FunctionCall;
 import com.riguz.jer.compile.def.expression.Literal;
 import com.riguz.jer.compile.def.expression.VariableReference;
 import com.riguz.jer.compile.def.statement.*;
+import com.riguz.jer.compile.exception.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +25,7 @@ public class TestParseStatements {
     List<Statement> statements;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ParseException {
         String source = "com/riguz/examples/process/Statements.jer";
         Script parsed = parser.parse(source);
         statements = parsed.getProcesses().get(0).getBlock().getStatements();

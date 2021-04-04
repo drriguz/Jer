@@ -4,8 +4,7 @@ import com.riguz.jer.antlr.generated.JerLexer;
 import com.riguz.jer.antlr.generated.JerParser;
 import com.riguz.jer.compile.Parser;
 import com.riguz.jer.compile.def.Script;
-import com.riguz.jer.compile.exception.CompileException;
-import org.antlr.v4.runtime.BailErrorStrategy;
+import com.riguz.jer.compile.exception.ParseException;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -28,7 +27,7 @@ public class AntlrParser implements Parser {
     }
 
     @Override
-    public Script parse(String sourceFile) {
+    public Script parse(String sourceFile) throws ParseException {
         Path filePath = workingDirectory.resolve(sourceFile);
         String packageName = new File(sourceFile).getParentFile().getPath();
         try {
@@ -37,7 +36,7 @@ public class AntlrParser implements Parser {
             ScriptVisitor scriptVisitor = new ScriptVisitor(file.getName(), packageName);
             return scriptVisitor.visitCompilationUint(antlrParser.compilationUint());
         } catch (IOException e) {
-            throw new CompileException("Parse error:" + e.getMessage());
+            throw new ParseException("Parse error:" + e.getMessage());
         }
     }
 

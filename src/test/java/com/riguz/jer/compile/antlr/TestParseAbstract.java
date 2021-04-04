@@ -5,6 +5,7 @@ import com.riguz.jer.compile.def.Abstract;
 import com.riguz.jer.compile.def.FunctionSignature;
 import com.riguz.jer.compile.def.Parameter;
 import com.riguz.jer.compile.def.Script;
+import com.riguz.jer.compile.exception.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class TestParseAbstract {
     List<Abstract> abstracts;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ParseException {
         String source = "com/riguz/examples/abstract/Abstracts.jer";
         Script parsed = parser.parse(source);
         abstracts = parsed.getAbstracts();

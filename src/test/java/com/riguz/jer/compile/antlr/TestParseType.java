@@ -4,6 +4,7 @@ import com.riguz.jer.compile.Parser;
 import com.riguz.jer.compile.def.*;
 import com.riguz.jer.compile.def.expression.Literal;
 import com.riguz.jer.compile.def.statement.ReturnStatement;
+import com.riguz.jer.compile.exception.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class TestParseType {
     List<Type> types;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ParseException {
         String source = "com/riguz/examples/type/Simple.jer";
         Script parsed = parser.parse(source);
         types = parsed.getTypes();

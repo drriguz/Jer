@@ -3,6 +3,7 @@ package com.riguz.jer.compile.antlr;
 import com.riguz.jer.compile.Parser;
 import com.riguz.jer.compile.def.Process;
 import com.riguz.jer.compile.def.Script;
+import com.riguz.jer.compile.exception.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class TestParseProcess {
     List<Process> processes;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ParseException {
         String source = "com/riguz/examples/process/EmptyProcesses.jer";
         Script parsed = parser.parse(source);
         processes = parsed.getProcesses();

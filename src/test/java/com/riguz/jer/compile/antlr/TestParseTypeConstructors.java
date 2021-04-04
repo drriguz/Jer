@@ -7,6 +7,7 @@ import com.riguz.jer.compile.def.Script;
 import com.riguz.jer.compile.def.Type;
 import com.riguz.jer.compile.def.expression.Literal;
 import com.riguz.jer.compile.def.statement.AssignStatement;
+import com.riguz.jer.compile.exception.ParseException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class TestParseTypeConstructors {
     List<Type> types;
 
     @Before
-    public void setUp() {
+    public void setUp() throws ParseException {
         String source = "com/riguz/examples/type/Constructors.jer";
         Script parsed = parser.parse(source);
         types = parsed.getTypes();

@@ -2,7 +2,7 @@ package com.riguz.jer.compile.antlr;
 
 import com.riguz.jer.compile.Parser;
 import com.riguz.jer.compile.def.Script;
-import com.riguz.jer.compile.exception.CompileException;
+import com.riguz.jer.compile.exception.ParseException;
 import org.junit.Test;
 
 import java.nio.file.Paths;
@@ -13,7 +13,7 @@ public class TestParsePackageAndImportedTypes {
     final Parser parser = new AntlrParser(Paths.get("src/test/resources"));
 
     @Test
-    public void detectSourceFilePackage() {
+    public void detectSourceFilePackage() throws ParseException {
         String source = "com/riguz/examples/HelloWorld.jer";
         Script parsed = parser.parse(source);
 
@@ -23,14 +23,14 @@ public class TestParsePackageAndImportedTypes {
         assertEquals("HelloWorld.jer", parsed.getFileName());
     }
 
-    @Test(expected = CompileException.class)
-    public void throwExceptionIfNotExists() {
+    @Test(expected = ParseException.class)
+    public void throwExceptionIfNotExists() throws ParseException {
         String source = "examples/com/riguz/NotExists.jer";
         Script parsed = parser.parse(source);
     }
 
     @Test
-    public void parseImportedTypes() {
+    public void parseImportedTypes() throws ParseException {
         String source = "com/riguz/examples/HelloWorld.jer";
         Script parsed = parser.parse(source);
 
