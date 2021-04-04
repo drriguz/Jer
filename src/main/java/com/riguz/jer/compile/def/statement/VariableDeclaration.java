@@ -61,6 +61,7 @@ public class VariableDeclaration extends Statement {
             return arrayInitializer;
         }
 
+        @SuppressWarnings("unchecked")
         public <T extends Expression> T getValue() {
             return (T) value;
         }

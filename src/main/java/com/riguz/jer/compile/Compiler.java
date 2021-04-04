@@ -1,7 +1,9 @@
 package com.riguz.jer.compile;
 
 import com.riguz.jer.compile.antlr.AntlrParser;
+import com.riguz.jer.compile.asm.AsmByteCodeTranslator;
 import com.riguz.jer.compile.def.Script;
+import com.riguz.jer.compile.exception.CompileException;
 import com.riguz.jer.compile.exception.ParseException;
 
 import java.nio.file.Path;
@@ -22,13 +24,24 @@ public class Compiler {
 
     public void compile() {
         List<Script> scripts = files.stream()
-                .map(f -> {
-                    try {
-                        return parser.parse(f);
-                    } catch (ParseException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
+                .map(this::parse)
                 .collect(Collectors.toList());
+        CompileContext context = new CompileContext(baseDir, scripts);
+        ByteCodeTranslator translator = new AsmByteCodeTranslator();
+        scripts.forEach(s -> {
+            try {
+                translator.translate(s);
+            } catch (CompileException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private Script parse(String file) {
+        try {
+            return parser.parse(file);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
