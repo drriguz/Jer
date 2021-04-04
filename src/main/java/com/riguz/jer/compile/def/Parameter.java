@@ -11,6 +11,14 @@ public class Parameter {
         this.type = type;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

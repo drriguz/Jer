@@ -1,6 +1,7 @@
 package com.riguz.jer.compile.asm;
 
 import com.riguz.jer.compile.ByteCodeTranslator;
+import com.riguz.jer.compile.CompileContext;
 import com.riguz.jer.compile.CompiledClass;
 import com.riguz.jer.compile.Parser;
 import com.riguz.jer.compile.antlr.AntlrParser;
@@ -15,7 +16,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class AsmByteCodeTranslatorTest {
-    final ByteCodeTranslator translator = new AsmByteCodeTranslator();
+    final ByteCodeTranslator translator = new AsmByteCodeTranslator(new CompileContext());
     final Parser parser = new AntlrParser(Paths.get("src/test/resources"));
 
     @Test

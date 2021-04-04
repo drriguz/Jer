@@ -1,25 +1,16 @@
 package com.riguz.jer.compile;
 
-import com.riguz.jer.compile.def.Script;
-
-import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CompileContext {
-    private final Path outputPath;
-    private final List<Script> scripts;
+    private final Map<String, String> fullQualifiedTypes = new HashMap<>();
 
-    public CompileContext(Path outputPath, List<Script> scripts) {
-        this.outputPath = outputPath;
-        this.scripts = Collections.unmodifiableList(scripts);
+    public void addFullQualifiedType(String type, String fullName) {
+        fullQualifiedTypes.put(type, fullName);
     }
 
-    public Path getOutputPath() {
-        return outputPath;
-    }
-
-    public List<Script> getScripts() {
-        return scripts;
+    public String getFullQualifiedType(String type) {
+        return fullQualifiedTypes.get(type);
     }
 }
