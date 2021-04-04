@@ -14,6 +14,10 @@ public class Jerc {
         return options;
     }
 
+    /*
+        test:
+        -w /Users/pwc/Documents/PROJECTS/Jer/src/test/resources com/riguz/examples/HelloWorld.jer
+     */
     public static void main(String[] args) {
         final CommandLine cmd;
         final Options options = buildOptions();

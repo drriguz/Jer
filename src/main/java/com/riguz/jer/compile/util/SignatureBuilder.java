@@ -1,7 +1,5 @@
 package com.riguz.jer.compile.util;
 
-import com.riguz.jer.compile.def.Parameter;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,11 +7,12 @@ public final class SignatureBuilder {
     private SignatureBuilder() {
     }
 
-    public static String getMethodDescriptor(List<Parameter> parameters, String returnType) {
-        String params = parameters
+    public static String getMethodDescriptor(List<String> paramTypes, String returnType) {
+        String params = paramTypes
                 .stream()
-                .map(Parameter::getType)
-                .collect(Collectors.joining(","));
-        return String.format("(%s)%s", params, returnType);
+                .collect(Collectors.joining(";"));
+        String returnTypeDescriptor = returnType == null ?
+                "V" : String.format("L%s;", returnType);
+        return String.format("(%s)%s", params, returnTypeDescriptor);
     }
 }

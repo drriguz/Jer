@@ -29,10 +29,8 @@ public class Compiler {
         List<Script> scripts = files.stream()
                 .map(this::parse)
                 .collect(Collectors.toList());
-        CompileContext context = new CompileContext();
-        addJvmDefaultImports(context);
 
-        ByteCodeTranslator translator = new AsmByteCodeTranslator(context);
+        ByteCodeTranslator translator = new AsmByteCodeTranslator();
         List<CompiledClass> compiledClasses = scripts.stream()
                 .map(script -> {
                     try {
@@ -57,19 +55,6 @@ public class Compiler {
                 e.printStackTrace();
             }
         });
-    }
-
-
-    private void addJvmDefaultImports(CompileContext context) {
-        context.addFullQualifiedType("Byte", "java/lang/Byte");
-        context.addFullQualifiedType("Boolean", "java/lang/Boolean");
-        context.addFullQualifiedType("Integer", "java/lang/Integer");
-        context.addFullQualifiedType("Float", "java/lang/Float");
-        context.addFullQualifiedType("Short", "java/lang/Short");
-        context.addFullQualifiedType("Long", "java/lang/Long");
-        context.addFullQualifiedType("Double", "java/lang/Double");
-        context.addFullQualifiedType("Character", "java/lang/Character");
-        context.addFullQualifiedType("System", "java/lang/System");
     }
 
     private Script parse(String file) {

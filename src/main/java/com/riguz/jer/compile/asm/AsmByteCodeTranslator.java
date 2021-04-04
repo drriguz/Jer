@@ -4,9 +4,11 @@ import com.riguz.jer.compile.ByteCodeTranslator;
 import com.riguz.jer.compile.CompileContext;
 import com.riguz.jer.compile.CompiledClass;
 import com.riguz.jer.compile.def.Script;
+import com.riguz.jer.compile.def.Process;
 import com.riguz.jer.compile.exception.CompileException;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,25 +17,30 @@ import static org.objectweb.asm.ClassWriter.COMPUTE_FRAMES;
 import static org.objectweb.asm.Opcodes.*;
 
 public class AsmByteCodeTranslator implements ByteCodeTranslator {
-    private final CompileContext context;
-
-    public AsmByteCodeTranslator(CompileContext context) {
-        this.context = context;
-    }
 
     @Override
     public List<CompiledClass> translate(Script script) throws CompileException {
         List<CompiledClass> complied = new ArrayList<>();
+        CompileContext context = new CompileContext();
+        registerImportedTypes(script, context);
 
         if (!script.getConstants().isEmpty() ||
                 !script.getProcesses().isEmpty()) {
-            ClassNode defaultClass = generateDefaultClass(script);
+            ClassNode defaultClass = generateDefaultClass(context, script);
             complied.add(
                     createCompileClass(
                             getCompiledFileName(script.getPackageName(), script.getFileName()),
                             defaultClass));
         }
         return complied;
+    }
+
+    private void registerImportedTypes(Script script, CompileContext context) {
+        script.getImportedTypes()
+                .forEach(i -> {
+                    String type = i.substring(i.lastIndexOf("/") + 1);
+                    context.addFullQualifiedType(type, i);
+                });
     }
 
     private CompiledClass createCompileClass(
@@ -48,12 +55,18 @@ public class AsmByteCodeTranslator implements ByteCodeTranslator {
                 bytes);
     }
 
-    private ClassNode generateDefaultClass(Script script) {
-        ClassNode defaultClass = createClass(script.getFileName()
-                .replace(".jer", ""));
-
+    private ClassNode generateDefaultClass(CompileContext context, Script script) {
+        ClassNode defaultClass = createClass(
+                script.getPackageName() + "/" + script.getFileName()
+                        .replace(".jer", ""));
+        MethodTranslator methodTranslator = new MethodTranslator(context);
+        script.getProcesses().forEach(p -> {
+            MethodNode methodNode = methodTranslator.translate(p);
+            defaultClass.methods.add(methodNode);
+        });
         return defaultClass;
     }
+
 
     private ClassNode createClass(String name) {
         ClassNode classNode = new ClassNode();
@@ -61,7 +74,6 @@ public class AsmByteCodeTranslator implements ByteCodeTranslator {
         classNode.access = ACC_PUBLIC + ACC_FINAL;
         classNode.name = name;
         classNode.superName = "java/lang/Object";
-
         return classNode;
     }
 

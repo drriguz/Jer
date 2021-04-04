@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class AsmByteCodeTranslatorTest {
-    final ByteCodeTranslator translator = new AsmByteCodeTranslator(new CompileContext());
+    final ByteCodeTranslator translator = new AsmByteCodeTranslator();
     final Parser parser = new AntlrParser(Paths.get("src/test/resources"));
 
     @Test
