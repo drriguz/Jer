@@ -12,23 +12,26 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class AntlrParser implements Parser {
-    private final Path workingDirectory;
+    private final Path baseDirectory;
 
-    public AntlrParser(Path workingDirectory) {
-        this.workingDirectory = workingDirectory;
+    public AntlrParser(Path baseDirectory) {
+        this.baseDirectory = baseDirectory;
     }
 
     public AntlrParser() {
-        this.workingDirectory = Paths.get(".");
+        this.baseDirectory = Paths.get(".");
     }
 
     @Override
     public Script parse(String sourceFile) throws ParseException {
-        Path filePath = workingDirectory.resolve(sourceFile);
+        Path filePath = baseDirectory.resolve(sourceFile);
+        if (!Files.isRegularFile(filePath))
+            throw new ParseException("File not exists or it's not a file:" + filePath);
         String packageName = new File(sourceFile).getParentFile().getPath();
         try {
             File file = filePath.toFile();
