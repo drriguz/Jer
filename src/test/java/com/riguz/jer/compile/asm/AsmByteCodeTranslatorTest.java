@@ -14,26 +14,26 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class AsmByteCodeTranslatorTest {
-    final ByteCodeTranslator translator = new AsmByteCodeTranslator();
-    final Parser parser = new AntlrParser(Paths.get("src/test/resources"));
-
-    @Test
-    public void generateDefaultClassIfConstantFound() throws ParseException, CompileException {
-        String source = "com/riguz/examples/constant/PrimitiveTypes.jer";
-        Script parsed = parser.parse(source);
-        List<CompiledClass> compiled = translator.translate(parsed);
-
-        assertEquals(1, compiled.size());
-        assertEquals("com/riguz/examples/constant/PrimitiveTypes.class", compiled.get(0).getFileName());
-    }
-
-    @Test
-    public void generateDefaultClassIfProcessFound() throws ParseException, CompileException {
-        String source = "com/riguz/examples/process/EmptyProcesses.jer";
-        Script parsed = parser.parse(source);
-        List<CompiledClass> compiled = translator.translate(parsed);
-
-        assertEquals(1, compiled.size());
-        assertEquals("com/riguz/examples/process/EmptyProcesses.class", compiled.get(0).getFileName());
-    }
+//    final ByteCodeTranslator translator = new AsmByteCodeTranslator();
+//    final Parser parser = new AntlrParser(Paths.get("src/test/resources"));
+//
+//    @Test
+//    public void generateDefaultClassIfConstantFound() throws ParseException, CompileException {
+//        String source = "com/riguz/examples/constant/PrimitiveTypes.jer";
+//        Script parsed = parser.parse(source);
+//        List<CompiledClass> compiled = translator.translate(parsed);
+//
+//        assertEquals(1, compiled.size());
+//        assertEquals("com/riguz/examples/constant/PrimitiveTypes.class", compiled.get(0).getFileName());
+//    }
+//
+//    @Test
+//    public void generateDefaultClassIfProcessFound() throws ParseException, CompileException {
+//        String source = "com/riguz/examples/process/EmptyProcesses.jer";
+//        Script parsed = parser.parse(source);
+//        List<CompiledClass> compiled = translator.translate(parsed);
+//
+//        assertEquals(1, compiled.size());
+//        assertEquals("com/riguz/examples/process/EmptyProcesses.class", compiled.get(0).getFileName());
+//    }
 }
