@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class Abstract {
+public class Abstract implements Identifiable {
     private final String name;
     private final List<Parameter> properties;
     private final List<FunctionSignature> functionSignatures;

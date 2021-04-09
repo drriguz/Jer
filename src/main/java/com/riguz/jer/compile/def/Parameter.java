@@ -2,7 +2,7 @@ package com.riguz.jer.compile.def;
 
 import java.util.Objects;
 
-public class Parameter {
+public class Parameter implements Identifiable {
     private final String name;
     private final String type;
 

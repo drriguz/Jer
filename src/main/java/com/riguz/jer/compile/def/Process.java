@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class Process {
+public class Process implements Identifiable {
     private final String name;
     private final List<Parameter> formalParameters;
     private final Block block;

@@ -1,13 +1,23 @@
 package com.riguz.jer.compile;
 
+import com.riguz.jer.compile.def.Script;
+
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CompileContext {
     private final Map<String, String> fullQualifiedTypes = new HashMap<>();
+    private final List<Script> sources;
 
-    public CompileContext() {
+    public CompileContext(List<Script> sources) {
+        this.sources = Collections.unmodifiableList(sources);
         addJvmDefaultImports();
+    }
+
+    public List<Script> getSources() {
+        return sources;
     }
 
     public void addFullQualifiedType(String type, String fullName) {

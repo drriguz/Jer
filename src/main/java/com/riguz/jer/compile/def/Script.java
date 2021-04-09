@@ -31,6 +31,10 @@ public class Script {
         this.types = Collections.unmodifiableList(types);
     }
 
+    public String getPath() {
+        return packageName + "/" + fileName;
+    }
+
     public String getFileName() {
         return fileName;
     }

@@ -1,4 +1,4 @@
-package com.riguz.jer.compile;
+package com.riguz.jer.compile.pipe.bytecode;
 
 public class CompiledClass {
     private final String fileName;

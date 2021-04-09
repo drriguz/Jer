@@ -1,8 +1,6 @@
 package com.riguz.jer.compile.asm;
 
-import com.riguz.jer.compile.ByteCodeTranslator;
-import com.riguz.jer.compile.CompileContext;
-import com.riguz.jer.compile.CompiledClass;
+import com.riguz.jer.compile.pipe.bytecode.CompiledClass;
 import com.riguz.jer.compile.Parser;
 import com.riguz.jer.compile.antlr.AntlrParser;
 import com.riguz.jer.compile.def.Script;

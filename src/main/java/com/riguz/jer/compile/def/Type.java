@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class Type {
+public class Type implements Identifiable {
     private final String name;
     private final List<String> abstractions;
     private final List<Parameter> properties;

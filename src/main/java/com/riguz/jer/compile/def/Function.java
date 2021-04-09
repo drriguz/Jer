@@ -3,7 +3,7 @@ package com.riguz.jer.compile.def;
 import java.util.List;
 import java.util.Objects;
 
-public class Function extends FunctionSignature {
+public class Function extends FunctionSignature implements Identifiable {
     private final Block block;
 
     public Function(String name,

@@ -8,7 +8,7 @@ import static com.riguz.jer.compile.asm.TypeResolver.resolveTypeDescriptor;
 import static org.junit.Assert.*;
 
 public class TypeResolverTest {
-    CompileContext context = new CompileContext();
+    CompileContext context = new CompileContext(sources, null);
 
     @Test
     public void resolveJavaLangClasses() {
