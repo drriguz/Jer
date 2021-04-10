@@ -16,7 +16,10 @@ public class TypeResolverTest {
             new DefaultClassDefinition(
                     "HelloWorld",
                     "com/riguz",
-                    Map.of("B", "com/riguz/another/B"),
+                    Map.of("A", "com/riguz/another/A",
+                            "B", "com/riguz/another/B",
+                            "C", "com/riguz/another/C",
+                            "Map", "java/util/Map"),
                     Collections.emptyList(),
                     Collections.emptyList()
             );
@@ -50,14 +53,28 @@ public class TypeResolverTest {
     }
 
     @Test
-    public void resolveImportedTypes() {
+    public void resolveImportedInternalTypes() {
         JavaType b = resolver.resolveTypeDescriptor(defaultClassDefinition, "B");
         assertEquals("com/riguz/another/B", b.getClassName());
+    }
+
+    @Test
+    public void resolveImportedExternalTypes() {
+        JavaType b = resolver.resolveTypeDescriptor(defaultClassDefinition, "String");
+        assertEquals("java/lang/String", b.getClassName());
+
+        JavaType b1 = resolver.resolveTypeDescriptor(defaultClassDefinition, "Map");
+        assertEquals("java/util/Map", b1.getClassName());
     }
 
     @Test(expected = CompileException.class)
     public void throwIfNotResolved() {
         JavaType self = resolver.resolveTypeDescriptor(defaultClassDefinition, "SB");
         assertEquals("com/riguz/HelloWorld", self.getClassName());
+    }
+
+    @Test(expected = CompileException.class)
+    public void throwIfResolvedButSourceOrClassNotLoaded() {
+        JavaType self = resolver.resolveTypeDescriptor(defaultClassDefinition, "C");
     }
 }

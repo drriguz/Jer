@@ -79,12 +79,29 @@ public final class TypeResolver {
 
     private JavaType tryResolveImportedType(ClassDefinition scope, String baseType) {
         String fullName = scope.getImportedClasses().get(baseType);
-        if (fullName != null)
-            return JavaType.of(fullName, false);
-        else {
+        if (fullName == null)
             fullName = autoImportedTypes.getFullQualifiedType(baseType);
+        if (fullName != null) {
+            boolean isInternal = ensureImportedClassFound(fullName);
+            return JavaType.of(fullName, isInternal);
+        } else
+            throw new CompileException("Type could not be resolved:" + baseType);
 
-            return fullName == null ? null : JavaType.of(fullName, true);
+    }
+
+    private boolean ensureImportedClassFound(String fullName) {
+        boolean isInternal = context.getSources()
+                .stream()
+                .anyMatch(s -> s.getFullName().equals(fullName));
+        if (isInternal)
+            return true;
+        else {
+            try {
+                Class<?> externalClass = Class.forName(fullName.replaceAll("/", "\\."));
+                return false;
+            } catch (ClassNotFoundException e) {
+                throw new CompileException("Class could not be found either from source or classpath:" + fullName);
+            }
         }
     }
 }
