@@ -1,5 +1,6 @@
 package com.riguz.jer.compile.pipe.bytecode;
 
+import com.riguz.jer.compile.def.VariableType;
 import com.riguz.jer.compile.exception.CompileException;
 import com.riguz.jer.compile.pipe.pre.ClassDefinition;
 
@@ -46,16 +47,12 @@ public final class TypeResolver {
                 .collect(Collectors.groupingBy(ClassDefinition::getPackageName));
     }
 
-    public JavaType resolveTypeDescriptor(ClassDefinition scope, String type)
+    public JavaType resolveType(ClassDefinition scope, VariableType type)
             throws CompileException {
-        int arrayEnd = type.lastIndexOf("[");
-        if (arrayEnd >= 0) {
-            String arrayDescriptor = type.substring(0, arrayEnd + 1);
-            String baseType = type.substring(arrayEnd + 1);
-            return JavaType.of(resolveBaseType(scope, baseType), arrayDescriptor);
-        } else {
-            return resolveBaseType(scope, type);
-        }
+        JavaType baseType = resolveBaseType(scope, type.getBaseType());
+        return type.isArray() ?
+                baseType.toArray(type.getArrayDimensions())
+                : baseType;
     }
 
     private JavaType resolveBaseType(ClassDefinition scope, String baseType) {
@@ -73,35 +70,36 @@ public final class TypeResolver {
         return packageClasses.stream()
                 .filter(c -> c.getClassName().equals(baseType))
                 .findAny()
-                .map(c -> JavaType.of(c.getFullName(), false))
+                .map(c -> JavaType.internal(c.getFullName()))
                 .orElse(null);
     }
 
     private JavaType tryResolveImportedType(ClassDefinition scope, String baseType) {
         String fullName = scope.getImportedClasses().get(baseType);
-        if (fullName == null)
-            fullName = autoImportedTypes.getFullQualifiedType(baseType);
-        if (fullName != null) {
-            boolean isInternal = ensureImportedClassFound(fullName);
-            return JavaType.of(fullName, isInternal);
-        } else
-            throw new CompileException("Type could not be resolved:" + baseType);
+        if (fullName != null)
+            return tryResolveImportedType(fullName, true);
 
+        fullName = autoImportedTypes.getFullQualifiedType(baseType);
+        if (fullName != null)
+            return tryResolveImportedType(fullName, false);
+        else
+            throw new CompileException("Type could not be resolved:" + baseType);
     }
 
-    private boolean ensureImportedClassFound(String fullName) {
-        boolean isInternal = context.getSources()
+    private JavaType tryResolveImportedType(String fullName, boolean maybeInternal) {
+        if (maybeInternal && isClassExistsInSource(fullName))
+            return JavaType.internal(fullName);
+        try {
+            Class<?> externalClass = Class.forName(fullName.replaceAll("/", "\\."));
+            return JavaType.external(fullName, externalClass);
+        } catch (ClassNotFoundException e) {
+            throw new CompileException("Class could not be found either from source or classpath:" + fullName);
+        }
+    }
+
+    private boolean isClassExistsInSource(String fullName) {
+        return context.getSources()
                 .stream()
                 .anyMatch(s -> s.getFullName().equals(fullName));
-        if (isInternal)
-            return true;
-        else {
-            try {
-                Class<?> externalClass = Class.forName(fullName.replaceAll("/", "\\."));
-                return false;
-            } catch (ClassNotFoundException e) {
-                throw new CompileException("Class could not be found either from source or classpath:" + fullName);
-            }
-        }
     }
 }

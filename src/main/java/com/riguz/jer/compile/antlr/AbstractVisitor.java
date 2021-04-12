@@ -11,12 +11,13 @@ import java.util.stream.Collectors;
 
 public class AbstractVisitor extends JerParserBaseVisitor<Abstract> {
     private final FunctionSignatureVisitor functionSignatureVisitor = new FunctionSignatureVisitor();
+    private final VariableTypeVisitor variableTypeVisitor = new VariableTypeVisitor();
 
     @Override
     public Abstract visitAbstractDeclaration(AbstractDeclarationContext ctx) {
         List<Parameter> properties = ctx.propertySignature()
                 .stream()
-                .map(p -> new Parameter(p.IDENTIFIER().getText(), p.type().getText()))
+                .map(p -> new Parameter(p.IDENTIFIER().getText(), p.type().accept(variableTypeVisitor)))
                 .collect(Collectors.toList());
         List<FunctionSignature> functions = ctx.functionSignature()
                 .stream()

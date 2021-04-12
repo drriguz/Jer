@@ -1,10 +1,7 @@
 package com.riguz.jer.compile.antlr;
 
 import com.riguz.jer.compile.Parser;
-import com.riguz.jer.compile.def.Abstract;
-import com.riguz.jer.compile.def.FunctionSignature;
-import com.riguz.jer.compile.def.Parameter;
-import com.riguz.jer.compile.def.Script;
+import com.riguz.jer.compile.def.*;
 import com.riguz.jer.compile.exception.ParseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +43,7 @@ public class TestParseAbstract {
         assertEquals("Properties", a.getName());
         assertTrue(a.getFunctionSignatures().isEmpty());
         assertEquals(1, a.getProperties().size());
-        assertEquals(new Parameter("name", "String"), a.getProperties().get(0));
+        assertEquals(new Parameter("name", new VariableType("String")), a.getProperties().get(0));
     }
 
     @Test
@@ -54,7 +51,7 @@ public class TestParseAbstract {
         Abstract a = abstracts.get(2);
         assertEquals("Functions", a.getName());
         assertEquals(1, a.getFunctionSignatures().size());
-        assertEquals(new FunctionSignature("sayHello", Collections.emptyList(), "String"),
+        assertEquals(new FunctionSignature("sayHello", Collections.emptyList(), new VariableType("String")),
                 a.getFunctionSignatures().get(0));
         assertTrue(a.getProperties().isEmpty());
     }

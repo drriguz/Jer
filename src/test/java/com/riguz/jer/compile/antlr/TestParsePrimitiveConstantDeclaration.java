@@ -2,6 +2,7 @@ package com.riguz.jer.compile.antlr;
 
 import com.riguz.jer.compile.Parser;
 import com.riguz.jer.compile.def.Script;
+import com.riguz.jer.compile.def.VariableType;
 import com.riguz.jer.compile.def.expression.Literal;
 import com.riguz.jer.compile.def.statement.VariableDeclaration;
 import com.riguz.jer.compile.exception.ParseException;
@@ -45,7 +46,7 @@ public class TestParsePrimitiveConstantDeclaration {
 
     private void verify(VariableDeclaration parsed, String name, String type, String expected) {
         assertEquals(name, parsed.getVariableName());
-        assertEquals(type, parsed.getType());
+        assertEquals(new VariableType(type), parsed.getType());
 
         VariableDeclaration.VariableInitializer variableInitializer = parsed.getVariableInitializer();
         assertFalse(variableInitializer.isArray());

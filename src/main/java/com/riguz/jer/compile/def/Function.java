@@ -8,7 +8,7 @@ public class Function extends FunctionSignature implements Identifiable {
 
     public Function(String name,
                     List<Parameter> formalParameters,
-                    String returnType,
+                    VariableType returnType,
                     Block block) {
         super(name, formalParameters, returnType);
         this.block = block;

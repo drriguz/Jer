@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Parameter implements Identifiable {
     private final String name;
-    private final String type;
+    private final VariableType type;
 
-    public Parameter(String name, String type) {
+    public Parameter(String name, VariableType type) {
         this.name = name;
         this.type = type;
     }
@@ -15,7 +15,7 @@ public class Parameter implements Identifiable {
         return name;
     }
 
-    public String getType() {
+    public VariableType getType() {
         return type;
     }
 

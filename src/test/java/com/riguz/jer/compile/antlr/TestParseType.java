@@ -47,7 +47,7 @@ public class TestParseType {
         assertEquals("PureProperties", a.getName());
         assertTrue(a.getFunctions().isEmpty());
         assertEquals(1, a.getProperties().size());
-        assertEquals(new Parameter("age", "Integer"), a.getProperties().get(0));
+        assertEquals(new Parameter("age", new VariableType("Integer")), a.getProperties().get(0));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class TestParseType {
         assertEquals(1, a.getFunctions().size());
         assertEquals(new Function("sayHello",
                         Collections.emptyList(),
-                        "String",
+                        new VariableType("String"),
                         new Block(Arrays.asList(new ReturnStatement(new Literal("Hello world!"))))),
                 a.getFunctions().get(0));
         assertTrue(a.getProperties().isEmpty());

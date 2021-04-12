@@ -61,7 +61,7 @@ constructorFormalArguments
     : constructorFormalArgument (',' constructorFormalArgument)*
     ;
 constructorFormalArgument
-    : IDENTIFIER (':' TYPE_NAME)?
+    : IDENTIFIER (':' type)?
     ;
 
 /** data type & variable **/

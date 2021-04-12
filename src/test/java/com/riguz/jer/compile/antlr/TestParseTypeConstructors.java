@@ -31,7 +31,7 @@ public class TestParseTypeConstructors {
     @Test
     public void parseEmptyAbstract() {
         Type a = types.get(0);
-        assertEquals(3, a.getConstructors().size());
+        assertEquals(4, a.getConstructors().size());
         assertEquals(new Constructor(Collections.emptyList(),
                         new Block(Collections.singletonList(
                                 new AssignStatement("age", new Literal("0"))))),

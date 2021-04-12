@@ -1,5 +1,6 @@
 type Dog is Animal {
     age: Integer
+    flags: [Integer
     () {
         age = 0
     }
@@ -7,6 +8,9 @@ type Dog is Animal {
 
     }
     (name, age, reCalculateAge: Boolean) {
+
+    }
+    (name, age, flags: [Integer) {
 
     }
 }

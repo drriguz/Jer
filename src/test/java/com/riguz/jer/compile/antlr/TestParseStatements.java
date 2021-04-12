@@ -1,9 +1,9 @@
 package com.riguz.jer.compile.antlr;
 
 import com.riguz.jer.compile.Parser;
-import com.riguz.jer.compile.def.Expression;
 import com.riguz.jer.compile.def.Script;
 import com.riguz.jer.compile.def.Statement;
+import com.riguz.jer.compile.def.VariableType;
 import com.riguz.jer.compile.def.expression.FunctionCall;
 import com.riguz.jer.compile.def.expression.Literal;
 import com.riguz.jer.compile.def.expression.VariableReference;
@@ -36,7 +36,7 @@ public class TestParseStatements {
         VariableDeclaration s = (VariableDeclaration) statements.get(0);
 
         assertEquals("foo", s.getVariableName());
-        assertEquals("Integer", s.getType());
+        assertEquals(new VariableType("Integer"), s.getType());
         assertEquals("10", ((Literal) s.getVariableInitializer().getValue()).getValue());
     }
 

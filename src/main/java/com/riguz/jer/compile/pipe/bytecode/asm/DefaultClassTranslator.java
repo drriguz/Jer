@@ -1,11 +1,13 @@
 package com.riguz.jer.compile.pipe.bytecode.asm;
 
-import com.riguz.jer.compile.pipe.bytecode.*;
 import com.riguz.jer.compile.def.Parameter;
 import com.riguz.jer.compile.def.Process;
+import com.riguz.jer.compile.def.Statement;
+import com.riguz.jer.compile.pipe.bytecode.*;
 import com.riguz.jer.compile.pipe.pre.DefaultClassDefinition;
 import com.riguz.jer.compile.util.SignatureBuilder;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.util.Collections;
@@ -47,7 +49,16 @@ public class DefaultClassTranslator extends ClassTranslator<DefaultClassDefiniti
                 null
         );
 
+        InsnList instructions = translateStatements(process.getBlock().getStatements());
+        staticMethod.instructions.add(instructions);
+
         return staticMethod;
+    }
+
+    private InsnList translateStatements(List<Statement> statements) {
+        InsnList instructions = new InsnList();
+
+        return instructions;
     }
 
     private String createMethodDescriptor(DefaultClassDefinition source,
@@ -55,7 +66,7 @@ public class DefaultClassTranslator extends ClassTranslator<DefaultClassDefiniti
         List<String> params = parameters
                 .stream()
                 .map(Parameter::getType)
-                .map(t -> typeResolver.resolveTypeDescriptor(source, t))
+                .map(t -> typeResolver.resolveType(source, t))
                 .map(JavaType::getDescriptor)
                 .collect(Collectors.toList());
         return SignatureBuilder.getMethodDescriptor(params, "V");

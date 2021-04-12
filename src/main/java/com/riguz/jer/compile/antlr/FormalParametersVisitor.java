@@ -9,11 +9,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FormalParametersVisitor extends JerParserBaseVisitor<List<Parameter>> {
+    private final VariableTypeVisitor variableTypeVisitor = new VariableTypeVisitor();
+
     @Override
     public List<Parameter> visitFormalParameters(FormalParametersContext ctx) {
         return ctx.formalParameter()
                 .stream()
-                .map(p -> new Parameter(p.IDENTIFIER().getText(), p.type().getText()))
+                .map(p -> new Parameter(p.IDENTIFIER().getText(), p.type().accept(variableTypeVisitor)))
                 .collect(Collectors.toList());
     }
 }

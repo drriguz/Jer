@@ -2,6 +2,7 @@ package com.riguz.jer.compile.antlr;
 
 import com.riguz.jer.compile.Parser;
 import com.riguz.jer.compile.def.Script;
+import com.riguz.jer.compile.def.VariableType;
 import com.riguz.jer.compile.def.expression.Literal;
 import com.riguz.jer.compile.def.statement.VariableDeclaration;
 import com.riguz.jer.compile.exception.ParseException;
@@ -27,17 +28,17 @@ public class TestParseArrayConstantDeclaration {
 
     @Test
     public void parseArrayTypes() {
-        verify(constants.get(0), "arri", "[Integer", Arrays.asList("1", "2", "3", "4", "5"));
-        verify(constants.get(1), "arrstr", "[String", Arrays.asList("hello", "world"));
-        verify(constants.get(2), "arr2d", "[[Integer",
+        verify(constants.get(0), "arri", new VariableType("Integer", 1), Arrays.asList("1", "2", "3", "4", "5"));
+        verify(constants.get(1), "arrstr", new VariableType("String", 1), Arrays.asList("hello", "world"));
+        verify(constants.get(2), "arr2d", new VariableType("Integer", 2),
                 Arrays.asList(Arrays.asList("1", "2", "3"),
-                        Arrays.asList("4","5", "6"),
+                        Arrays.asList("4", "5", "6"),
                         Arrays.asList("7", "8", "9")));
     }
 
     private <T> void verify(VariableDeclaration parsed,
                             String name,
-                            String type,
+                            VariableType type,
                             List<T> expected) {
         assertEquals(name, parsed.getVariableName());
         assertEquals(type, parsed.getType());
@@ -50,7 +51,7 @@ public class TestParseArrayConstantDeclaration {
         List<VariableDeclaration.VariableInitializer> v = variableInitializer.getArrayInitializer();
         assertEquals(expected.size(), v.size());
 
-        int arrayDimensions = type.lastIndexOf('[') + 1;
+        int arrayDimensions = type.getArrayDimensions();
         for (int i = 0; i < expected.size(); i++) {
             if (arrayDimensions == 1) {
                 assertFalse(v.get(i).isArray());

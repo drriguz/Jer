@@ -7,12 +7,12 @@ import java.util.Objects;
 public class FunctionSignature {
     protected final String name;
     protected final List<Parameter> formalParameters;
-    protected final String returnType;
+    protected final VariableType returnType;
 
 
     public FunctionSignature(String name,
                              List<Parameter> formalParameters,
-                             String returnType) {
+                             VariableType returnType) {
         this.name = name;
         this.formalParameters = Collections.unmodifiableList(formalParameters);
         this.returnType = returnType;
@@ -26,7 +26,7 @@ public class FunctionSignature {
         return formalParameters;
     }
 
-    public String getReturnType() {
+    public VariableType getReturnType() {
         return returnType;
     }
 

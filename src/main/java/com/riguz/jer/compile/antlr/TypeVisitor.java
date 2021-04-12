@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 public class TypeVisitor extends JerParserBaseVisitor<Type> {
     private final FunctionSignatureVisitor functionSignatureVisitor = new FunctionSignatureVisitor();
     private final BlockVisitor blockVisitor = new BlockVisitor();
-    private final FormalParametersVisitor parametersVisitor = new FormalParametersVisitor();
+    private final VariableTypeVisitor variableTypeVisitor = new VariableTypeVisitor();
 
     @Override
     public Type visitTypeDeclaration(TypeDeclarationContext ctx) {
         List<Parameter> properties = ctx.propertySignature()
                 .stream()
-                .map(p -> new Parameter(p.IDENTIFIER().getText(), p.type().getText()))
+                .map(p -> new Parameter(p.IDENTIFIER().getText(), p.type().accept(variableTypeVisitor)))
                 .collect(Collectors.toList());
 
         List<String> abstractions = visitAbstractions(ctx);
@@ -67,7 +67,7 @@ public class TypeVisitor extends JerParserBaseVisitor<Type> {
                 ctx.constructorFormalArguments().constructorFormalArgument()
                         .stream()
                         .map(c -> new Parameter(c.IDENTIFIER().getText(),
-                                c.TYPE_NAME() == null ? null : c.TYPE_NAME().getText()))
+                                c.type() == null ? null : c.type().accept(variableTypeVisitor)))
                         .collect(Collectors.toList());
         return new Constructor(
                 parameters,

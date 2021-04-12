@@ -2,6 +2,7 @@ package com.riguz.jer.compile.def.statement;
 
 import com.riguz.jer.compile.def.Expression;
 import com.riguz.jer.compile.def.Statement;
+import com.riguz.jer.compile.def.VariableType;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,11 +10,11 @@ import java.util.Objects;
 
 public class VariableDeclaration extends Statement {
     private final String variableName;
-    private final String type;
+    private final VariableType type;
     private final VariableInitializer variableInitializer;
 
     public VariableDeclaration(String variableName,
-                               String type,
+                               VariableType type,
                                VariableInitializer variableInitializer) {
         this.variableName = variableName;
         this.type = type;
@@ -24,7 +25,7 @@ public class VariableDeclaration extends Statement {
         return variableName;
     }
 
-    public String getType() {
+    public VariableType getType() {
         return type;
     }
 

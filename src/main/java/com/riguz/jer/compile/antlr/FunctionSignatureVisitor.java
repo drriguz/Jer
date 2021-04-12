@@ -10,6 +10,7 @@ import java.util.List;
 
 public class FunctionSignatureVisitor extends JerParserBaseVisitor<FunctionSignature> {
     private final FormalParametersVisitor parametersVisitor = new FormalParametersVisitor();
+    private final VariableTypeVisitor variableTypeVisitor = new VariableTypeVisitor();
 
     @Override
     public FunctionSignature visitFunctionSignature(FunctionSignatureContext ctx) {
@@ -18,6 +19,6 @@ public class FunctionSignatureVisitor extends JerParserBaseVisitor<FunctionSigna
                 ctx.formalParameters().accept(parametersVisitor);
         return new FunctionSignature(ctx.IDENTIFIER().getText(),
                 parameters,
-                ctx.type().getText());
+                ctx.type().accept(variableTypeVisitor));
     }
 }
