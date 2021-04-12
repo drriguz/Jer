@@ -5,7 +5,7 @@ import com.riguz.jer.compile.pipe.bytecode.asm.DefaultClassTranslator;
 import com.riguz.jer.compile.pipe.bytecode.asm.TypeClassTranslator;
 import com.riguz.jer.compile.pipe.pre.AbstractClassDefinition;
 import com.riguz.jer.compile.pipe.pre.ClassDefinition;
-import com.riguz.jer.compile.pipe.pre.DefaultClassDefinition;
+import com.riguz.jer.compile.pipe.pre.ConstClassDefinition;
 import com.riguz.jer.compile.pipe.pre.TypeClassDefinition;
 
 import java.util.Collection;
@@ -23,8 +23,8 @@ public class BytecodeTranslator {
     }
 
     private List<CompiledClass> translate(Context context, ClassDefinition definition) {
-        if (definition instanceof DefaultClassDefinition)
-            return new DefaultClassTranslator(context).translate((DefaultClassDefinition) definition);
+        if (definition instanceof ConstClassDefinition)
+            return new DefaultClassTranslator(context).translate((ConstClassDefinition) definition);
         else if (definition instanceof AbstractClassDefinition)
             return new AbstractClassTranslator(context).translate((AbstractClassDefinition) definition);
         else if (definition instanceof TypeClassDefinition)

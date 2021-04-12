@@ -3,7 +3,7 @@ package com.riguz.jer.compile.pipe.bytecode;
 import com.riguz.jer.compile.def.VariableType;
 import com.riguz.jer.compile.exception.CompileException;
 import com.riguz.jer.compile.pipe.pre.AbstractClassDefinition;
-import com.riguz.jer.compile.pipe.pre.DefaultClassDefinition;
+import com.riguz.jer.compile.pipe.pre.ConstClassDefinition;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -13,8 +13,8 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 
 public class TypeResolverTest {
-    private final DefaultClassDefinition defaultClassDefinition =
-            new DefaultClassDefinition(
+    private final ConstClassDefinition constClassDefinition =
+            new ConstClassDefinition(
                     "HelloWorld",
                     "com/riguz",
                     Map.of("A", "com/riguz/another/A",
@@ -41,41 +41,41 @@ public class TypeResolverTest {
                     Collections.emptyList()
             );
 
-    Context context = new Context(Arrays.asList(defaultClassDefinition, a, b));
+    Context context = new Context(Arrays.asList(constClassDefinition, a, b));
     TypeResolver resolver = new TypeResolver(context);
 
     @Test
     public void resolveTypeFromSamePackage() {
-        JavaType self = resolver.resolveType(defaultClassDefinition, new VariableType("HelloWorld"));
+        ResolvedType self = resolver.resolveType(constClassDefinition, new VariableType("HelloWorld"));
         assertEquals("com/riguz/HelloWorld", self.getClassName());
 
-        JavaType a = resolver.resolveType(defaultClassDefinition, new VariableType("A"));
+        ResolvedType a = resolver.resolveType(constClassDefinition, new VariableType("A"));
         assertEquals("com/riguz/A", a.getClassName());
     }
 
     @Test
     public void resolveImportedInternalTypes() {
-        JavaType b = resolver.resolveType(defaultClassDefinition, new VariableType("B"));
+        ResolvedType b = resolver.resolveType(constClassDefinition, new VariableType("B"));
         assertEquals("com/riguz/another/B", b.getClassName());
     }
 
     @Test
     public void resolveImportedExternalTypes() {
-        JavaType b = resolver.resolveType(defaultClassDefinition, new VariableType("String"));
+        ResolvedType b = resolver.resolveType(constClassDefinition, new VariableType("String"));
         assertEquals("java/lang/String", b.getClassName());
 
-        JavaType b1 = resolver.resolveType(defaultClassDefinition, new VariableType("Map"));
+        ResolvedType b1 = resolver.resolveType(constClassDefinition, new VariableType("Map"));
         assertEquals("java/util/Map", b1.getClassName());
     }
 
     @Test(expected = CompileException.class)
     public void throwIfNotResolved() {
-        JavaType self = resolver.resolveType(defaultClassDefinition, new VariableType("SB"));
+        ResolvedType self = resolver.resolveType(constClassDefinition, new VariableType("SB"));
         assertEquals("com/riguz/HelloWorld", self.getClassName());
     }
 
     @Test(expected = CompileException.class)
     public void throwIfResolvedButSourceOrClassNotLoaded() {
-        JavaType self = resolver.resolveType(defaultClassDefinition, new VariableType("C"));
+        ResolvedType self = resolver.resolveType(constClassDefinition, new VariableType("C"));
     }
 }

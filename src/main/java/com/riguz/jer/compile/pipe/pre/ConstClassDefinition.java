@@ -9,26 +9,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class DefaultClassDefinition extends ClassDefinition {
+public class ConstClassDefinition extends ClassDefinition {
     private final List<VariableDeclaration> constants;
     private final List<Process> processes;
 
-    public DefaultClassDefinition(String className,
-                                  String packageName,
-                                  Map<String, String> importedClasses,
-                                  List<VariableDeclaration> constants,
-                                  List<Process> processes) {
+    public ConstClassDefinition(String className,
+                                String packageName,
+                                Map<String, String> importedClasses,
+                                List<VariableDeclaration> constants,
+                                List<Process> processes) {
         super(className, packageName, importedClasses);
         this.constants = Collections.unmodifiableList(constants);
         this.processes = Collections.unmodifiableList(processes);
     }
 
-    public static DefaultClassDefinition from(Script script) {
+    public static ConstClassDefinition from(Script script) {
         Map<String, String> importedTypes = script.getImportedTypes()
                 .stream()
                 .collect(Collectors.toMap(p -> p.substring(p.lastIndexOf('/')), p -> p));
 
-        return new DefaultClassDefinition(
+        return new ConstClassDefinition(
                 script.getFileName().replace(".jer", ""),
                 script.getPackageName(),
                 importedTypes,

@@ -20,7 +20,7 @@ public class PreProcessor {
         List<ClassDefinition> classes = new ArrayList<>();
         if (!script.getConstants().isEmpty() ||
                 !script.getProcesses().isEmpty()) {
-            classes.add(DefaultClassDefinition.from(script));
+            classes.add(ConstClassDefinition.from(script));
         }
         List<AbstractClassDefinition> abstracts = script.getAbstracts()
                 .stream()

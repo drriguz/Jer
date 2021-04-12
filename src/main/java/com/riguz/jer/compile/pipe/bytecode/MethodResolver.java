@@ -1,11 +1,14 @@
 package com.riguz.jer.compile.pipe.bytecode;
 
+import com.riguz.jer.compile.def.Process;
 import com.riguz.jer.compile.pipe.pre.ClassDefinition;
-import com.riguz.jer.compile.pipe.pre.DefaultClassDefinition;
+import com.riguz.jer.compile.pipe.pre.ConstClassDefinition;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MethodResolver {
     private final Context context;
@@ -16,18 +19,45 @@ public class MethodResolver {
         this.typeResolver = new TypeResolver(context);
     }
 
-    // todo: impl this
-    public List<Method> resolveCandidateProcess(
+    public List<ResolvedMethod> resolveCandidateProcess(
             ClassDefinition scope,
             String processName) {
-        List<Method> candidates = new ArrayList<>();
-        if (scope instanceof DefaultClassDefinition) {
-            DefaultClassDefinition d = (DefaultClassDefinition) scope;
-//            d.getProcesses().stream()
-//                    .filter(p -> p.getName().equals(processName))
-//                    .map(p -> new Method(d.getFullName(), p.getName(), p.))
-//                    .collect(Collectors.toList());
+        ResolvedType self = ResolvedType.internal(scope.getFullName(), scope);
+        List<ResolvedType> importedTypes = scope.getImportedClasses()
+                .values()
+                .stream()
+                .map(fullName -> typeResolver.resolveType(fullName))
+                .collect(Collectors.toList());
+
+        return Stream.concat(Stream.of(self), importedTypes.stream())
+                .map(t -> resolveCandidateProcess(t, processName))
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    private List<ResolvedMethod> resolveCandidateProcess(ResolvedType type, String processName) {
+        if (!type.isExternal()) {
+            ClassDefinition classDefinition = type.getClassDefinition();
+            if (classDefinition instanceof ConstClassDefinition) {
+                ConstClassDefinition d = (ConstClassDefinition) classDefinition;
+                return d.getProcesses().stream()
+                        .filter(p -> p.getName().equals(processName))
+                        .map(p -> convert(classDefinition, p))
+                        .collect(Collectors.toList());
+            }
         }
-        return candidates;
+        // todo: support external classes
+        return Collections.emptyList();
+    }
+
+    private ResolvedMethod convert(ClassDefinition scope, Process process) {
+        ResolvedType owner = ResolvedType.internal(scope.getFullName(), scope);
+
+        List<ResolvedParameter> parameters = process.getFormalParameters()
+                .stream()
+                .map(p -> new ResolvedParameter(p.getName(), typeResolver.resolveType(scope, p.getType())))
+                .collect(Collectors.toList());
+
+        return ResolvedMethod.internal(owner, process.getName(), parameters);
     }
 }

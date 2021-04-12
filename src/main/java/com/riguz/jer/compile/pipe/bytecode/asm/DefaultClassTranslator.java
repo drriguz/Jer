@@ -4,7 +4,7 @@ import com.riguz.jer.compile.def.Parameter;
 import com.riguz.jer.compile.def.Process;
 import com.riguz.jer.compile.def.Statement;
 import com.riguz.jer.compile.pipe.bytecode.*;
-import com.riguz.jer.compile.pipe.pre.DefaultClassDefinition;
+import com.riguz.jer.compile.pipe.pre.ConstClassDefinition;
 import com.riguz.jer.compile.util.SignatureBuilder;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
@@ -19,7 +19,7 @@ import static com.riguz.jer.compile.pipe.bytecode.asm.AsmUtil.createCompileClass
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
-public class DefaultClassTranslator extends ClassTranslator<DefaultClassDefinition> {
+public class DefaultClassTranslator extends ClassTranslator<ConstClassDefinition> {
     private final TypeResolver typeResolver;
 
     public DefaultClassTranslator(Context context) {
@@ -28,7 +28,7 @@ public class DefaultClassTranslator extends ClassTranslator<DefaultClassDefiniti
     }
 
     @Override
-    public List<CompiledClass> translate(DefaultClassDefinition source) {
+    public List<CompiledClass> translate(ConstClassDefinition source) {
         ClassNode defaultClass = createClass(source.getFullName());
         List<MethodNode> processes = source.getProcesses()
                 .stream()
@@ -40,7 +40,7 @@ public class DefaultClassTranslator extends ClassTranslator<DefaultClassDefiniti
                 defaultClass));
     }
 
-    private MethodNode translateProcess(DefaultClassDefinition source, Process process) {
+    private MethodNode translateProcess(ConstClassDefinition source, Process process) {
         MethodNode staticMethod = new MethodNode(
                 ACC_PUBLIC + ACC_STATIC,
                 process.getName(),
@@ -61,13 +61,13 @@ public class DefaultClassTranslator extends ClassTranslator<DefaultClassDefiniti
         return instructions;
     }
 
-    private String createMethodDescriptor(DefaultClassDefinition source,
+    private String createMethodDescriptor(ConstClassDefinition source,
                                           List<Parameter> parameters) {
         List<String> params = parameters
                 .stream()
                 .map(Parameter::getType)
                 .map(t -> typeResolver.resolveType(source, t))
-                .map(JavaType::getDescriptor)
+                .map(ResolvedType::getDescriptor)
                 .collect(Collectors.toList());
         return SignatureBuilder.getMethodDescriptor(params, "V");
     }

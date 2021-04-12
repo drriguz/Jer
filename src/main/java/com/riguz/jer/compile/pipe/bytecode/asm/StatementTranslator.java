@@ -5,7 +5,7 @@ import com.riguz.jer.compile.def.statement.ProcessStatement;
 import com.riguz.jer.compile.pipe.bytecode.Context;
 import com.riguz.jer.compile.pipe.bytecode.TypeResolver;
 import com.riguz.jer.compile.pipe.pre.ClassDefinition;
-import com.riguz.jer.compile.pipe.pre.DefaultClassDefinition;
+import com.riguz.jer.compile.pipe.pre.ConstClassDefinition;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
 
@@ -36,7 +36,7 @@ public class StatementTranslator {
 
     private String findProcessMethod(String methodName) {
         // find process from current script
-        if (providerClass instanceof DefaultClassDefinition) {
+        if (providerClass instanceof ConstClassDefinition) {
 
         }
 
