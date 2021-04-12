@@ -3,6 +3,9 @@ package com.riguz.jer.compile.pipe.bytecode;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.riguz.jer.compile.util.SignatureBuilder.getMethodDescriptor;
 
 public class ResolvedMethod {
     private final ResolvedType owner;
@@ -47,5 +50,13 @@ public class ResolvedMethod {
 
     public Method getJavaMethod() {
         return javaMethod;
+    }
+
+    public String getDescriptor() {
+        return getMethodDescriptor(
+                parameters.stream()
+                        .map(p -> p.getType().getClassName())
+                        .collect(Collectors.toList()),
+                "V");
     }
 }

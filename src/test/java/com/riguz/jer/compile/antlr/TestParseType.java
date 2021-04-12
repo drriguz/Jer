@@ -58,7 +58,7 @@ public class TestParseType {
         assertEquals(new Function("sayHello",
                         Collections.emptyList(),
                         new VariableType("String"),
-                        new Block(Arrays.asList(new ReturnStatement(new Literal("Hello world!"))))),
+                        new Block(Arrays.asList(new ReturnStatement(new Literal("Hello world!", Literal.Type.STRING))))),
                 a.getFunctions().get(0));
         assertTrue(a.getProperties().isEmpty());
     }

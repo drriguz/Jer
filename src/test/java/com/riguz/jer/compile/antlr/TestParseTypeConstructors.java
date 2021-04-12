@@ -34,7 +34,7 @@ public class TestParseTypeConstructors {
         assertEquals(4, a.getConstructors().size());
         assertEquals(new Constructor(Collections.emptyList(),
                         new Block(Collections.singletonList(
-                                new AssignStatement("age", new Literal("0"))))),
+                                new AssignStatement("age", new Literal("0", Literal.Type.DECIMAL))))),
                 a.getConstructors().get(0));
         assertEquals(2, a.getConstructors().get(1).getFormalParameters().size());
         assertEquals(3, a.getConstructors().get(2).getFormalParameters().size());

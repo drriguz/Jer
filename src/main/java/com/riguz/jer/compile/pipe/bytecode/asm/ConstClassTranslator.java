@@ -19,10 +19,10 @@ import static com.riguz.jer.compile.pipe.bytecode.asm.AsmUtil.createCompileClass
 import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
 import static org.objectweb.asm.Opcodes.ACC_STATIC;
 
-public class DefaultClassTranslator extends ClassTranslator<ConstClassDefinition> {
+public class ConstClassTranslator extends ClassTranslator<ConstClassDefinition> {
     private final TypeResolver typeResolver;
 
-    public DefaultClassTranslator(Context context) {
+    public ConstClassTranslator(Context context) {
         super(context);
         this.typeResolver = new TypeResolver(context);
     }
@@ -49,15 +49,19 @@ public class DefaultClassTranslator extends ClassTranslator<ConstClassDefinition
                 null
         );
 
-        InsnList instructions = translateStatements(process.getBlock().getStatements());
+        InsnList instructions = translateStatements(source, process.getBlock().getStatements());
         staticMethod.instructions.add(instructions);
 
         return staticMethod;
     }
 
-    private InsnList translateStatements(List<Statement> statements) {
+    private InsnList translateStatements(ConstClassDefinition source, List<Statement> statements) {
         InsnList instructions = new InsnList();
-
+        StatementTranslator statementTranslator = new StatementTranslator(context, source);
+        statements
+                .stream()
+                .map(statementTranslator::translate)
+                .forEach(instructions::add);
         return instructions;
     }
 

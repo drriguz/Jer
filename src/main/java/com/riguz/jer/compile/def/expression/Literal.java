@@ -6,10 +6,16 @@ import org.apache.commons.text.StringEscapeUtils;
 import java.util.Objects;
 
 public class Literal extends Expression {
-    private final String value;
+    public enum Type {
+        DECIMAL, BOOL, CHAR, STRING
+    }
 
-    public Literal(String value) {
+    private final String value;
+    private final Type type;
+
+    public Literal(String value, Type type) {
         this.value = value;
+        this.type = type;
     }
 
     public String getValue() {
@@ -55,16 +61,21 @@ public class Literal extends Expression {
         return StringEscapeUtils.unescapeJava(value);
     }
 
+    public Type getType() {
+        return type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Literal literal = (Literal) o;
-        return Objects.equals(value, literal.value);
+        return Objects.equals(value, literal.value) &&
+                type == literal.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(value, type);
     }
 }

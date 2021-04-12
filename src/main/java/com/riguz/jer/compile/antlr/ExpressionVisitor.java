@@ -5,6 +5,7 @@ import com.riguz.jer.antlr.generated.JerParser.ObjectCreationContext;
 import com.riguz.jer.antlr.generated.JerParserBaseVisitor;
 import com.riguz.jer.compile.def.Expression;
 import com.riguz.jer.compile.def.expression.*;
+import com.riguz.jer.compile.def.expression.Literal.Type;
 
 import java.util.Collections;
 import java.util.List;
@@ -54,13 +55,14 @@ public class ExpressionVisitor extends JerParserBaseVisitor<Expression> {
 
     @Override
     public Expression visitLiteral(JerParser.LiteralContext ctx) {
-        if (ctx.FLOAT_LITERAL() != null ||
-                ctx.DECIMAL_LITERAL() != null ||
-                ctx.BOOL_LITERAL() != null)
-            return new Literal(ctx.getText());
-        else if (ctx.CHAR_LITERAL() != null ||
-                ctx.STRING_LITERAL() != null)
-            return new Literal(removeQuotes(ctx.getText()));
+        if (ctx.FLOAT_LITERAL() != null || ctx.DECIMAL_LITERAL() != null)
+            return new Literal(ctx.getText(), Type.DECIMAL);
+        else if (ctx.BOOL_LITERAL() != null)
+            return new Literal(ctx.getText(), Type.BOOL);
+        else if (ctx.CHAR_LITERAL() != null)
+            return new Literal(removeQuotes(ctx.getText()), Type.CHAR);
+        else if (ctx.STRING_LITERAL() != null)
+            return new Literal(removeQuotes(ctx.getText()), Type.STRING);
         else
             throw new IllegalArgumentException("Unexpected literal");
     }

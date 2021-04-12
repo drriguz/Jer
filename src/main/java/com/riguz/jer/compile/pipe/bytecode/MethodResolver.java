@@ -21,27 +21,32 @@ public class MethodResolver {
 
     public List<ResolvedMethod> resolveCandidateProcess(
             ClassDefinition scope,
-            String processName) {
+            String processName,
+            int argumentCount) {
         ResolvedType self = ResolvedType.internal(scope.getFullName(), scope);
         List<ResolvedType> importedTypes = scope.getImportedClasses()
                 .values()
                 .stream()
-                .map(fullName -> typeResolver.resolveType(fullName))
+                .map(typeResolver::resolveType)
                 .collect(Collectors.toList());
 
         return Stream.concat(Stream.of(self), importedTypes.stream())
-                .map(t -> resolveCandidateProcess(t, processName))
+                .map(t -> resolveCandidateProcess(t, processName, argumentCount))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
-    private List<ResolvedMethod> resolveCandidateProcess(ResolvedType type, String processName) {
+    private List<ResolvedMethod> resolveCandidateProcess(
+            ResolvedType type,
+            String processName,
+            int argumentCount) {
         if (!type.isExternal()) {
             ClassDefinition classDefinition = type.getClassDefinition();
             if (classDefinition instanceof ConstClassDefinition) {
                 ConstClassDefinition d = (ConstClassDefinition) classDefinition;
                 return d.getProcesses().stream()
-                        .filter(p -> p.getName().equals(processName))
+                        .filter(p -> p.getName().equals(processName) &&
+                                p.getFormalParameters().size() == argumentCount)
                         .map(p -> convert(classDefinition, p))
                         .collect(Collectors.toList());
             }

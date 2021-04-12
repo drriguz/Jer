@@ -6,6 +6,7 @@ import com.riguz.jer.compile.def.Statement;
 import com.riguz.jer.compile.def.VariableType;
 import com.riguz.jer.compile.def.expression.FunctionCall;
 import com.riguz.jer.compile.def.expression.Literal;
+import com.riguz.jer.compile.def.expression.Literal.Type;
 import com.riguz.jer.compile.def.expression.VariableReference;
 import com.riguz.jer.compile.def.statement.*;
 import com.riguz.jer.compile.exception.ParseException;
@@ -80,7 +81,7 @@ public class TestParseStatements {
 
         FunctionCall c1 = (FunctionCall) s1.getCondition();
         assertEquals("eq", c1.getFunctionName());
-        assertEquals(new ProcessStatement("print", Arrays.asList(new Literal("foo is 10"))),
+        assertEquals(new ProcessStatement("print", Arrays.asList(new Literal("foo is 10", Type.STRING))),
                 s1.getStatement());
     }
 
@@ -91,11 +92,11 @@ public class TestParseStatements {
         FunctionCall c = (FunctionCall) s.getCondition();
         assertEquals(new FunctionCall(new VariableReference("foo", false),
                 "gt",
-                Collections.singletonList(new Literal("0"))), c);
+                Collections.singletonList(new Literal("0", Type.DECIMAL))), c);
         assertEquals(new AssignStatement("foo",
                         new FunctionCall(new VariableReference("foo", false),
                                 "minus",
-                                Collections.singletonList(new Literal("1")))),
+                                Collections.singletonList(new Literal("1", Type.DECIMAL)))),
                 s.getStatement());
     }
 
@@ -103,6 +104,6 @@ public class TestParseStatements {
     public void parseReturnStatement() {
         ReturnStatement s = (ReturnStatement) statements.get(7);
 
-        assertEquals(new Literal("1"), s.getReturnValue());
+        assertEquals(new Literal("1", Type.DECIMAL), s.getReturnValue());
     }
 }
