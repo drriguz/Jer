@@ -1,6 +1,5 @@
 package com.riguz.jer.compile.pipe.bytecode;
 
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,25 +10,11 @@ public class ResolvedMethod {
     private final ResolvedType owner;
     private final String name;
     private final List<ResolvedParameter> parameters;
-    private final Method javaMethod;
 
-    private ResolvedMethod(ResolvedType owner, String name, List<ResolvedParameter> parameters, Method javaMethod) {
+    public ResolvedMethod(ResolvedType owner, String name, List<ResolvedParameter> parameters) {
         this.owner = owner;
         this.name = name;
         this.parameters = Collections.unmodifiableList(parameters);
-        this.javaMethod = javaMethod;
-    }
-
-    public static ResolvedMethod internal(ResolvedType owner, String name, List<ResolvedParameter> parameters) {
-        if (owner.isExternal())
-            throw new IllegalArgumentException("Owner is external");
-        return new ResolvedMethod(owner, name, parameters, null);
-    }
-
-    public static ResolvedMethod external(ResolvedType owner, String name, Method javaMethod) {
-        if (!owner.isExternal())
-            throw new IllegalArgumentException("Owner is not external");
-        return new ResolvedMethod(owner, name, null, javaMethod);
     }
 
     public boolean isExternal() {
@@ -48,14 +33,10 @@ public class ResolvedMethod {
         return parameters;
     }
 
-    public Method getJavaMethod() {
-        return javaMethod;
-    }
-
     public String getDescriptor() {
         return getMethodDescriptor(
                 parameters.stream()
-                        .map(p -> p.getType().getClassName())
+                        .map(p -> p.getType().getDescriptor())
                         .collect(Collectors.toList()),
                 "V");
     }

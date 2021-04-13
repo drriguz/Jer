@@ -8,6 +8,7 @@ import com.riguz.jer.compile.pipe.pre.ConstClassDefinition;
 import com.riguz.jer.compile.util.SignatureBuilder;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import java.util.Collections;
@@ -16,8 +17,7 @@ import java.util.stream.Collectors;
 
 import static com.riguz.jer.compile.pipe.bytecode.asm.AsmUtil.createClass;
 import static com.riguz.jer.compile.pipe.bytecode.asm.AsmUtil.createCompileClass;
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.*;
 
 public class ConstClassTranslator extends ClassTranslator<ConstClassDefinition> {
     private final TypeResolver typeResolver;
@@ -51,7 +51,7 @@ public class ConstClassTranslator extends ClassTranslator<ConstClassDefinition> 
 
         InsnList instructions = translateStatements(source, process.getBlock().getStatements());
         staticMethod.instructions.add(instructions);
-
+        staticMethod.instructions.add(new InsnNode(RETURN));
         return staticMethod;
     }
 

@@ -35,10 +35,7 @@ public class StatementTranslator {
         InsnList instructions = new InsnList();
         if (statement instanceof ProcessStatement) {
             ProcessStatement p = (ProcessStatement) statement;
-            instructions.add(new MethodInsnNode(INVOKESTATIC,
-                    "java/io/PrintStream",
-                    "println",
-                    "(Ljava/lang/String;)V"));
+            instructions.add(translate(p));
         }
         return instructions;
     }
@@ -66,7 +63,7 @@ public class StatementTranslator {
             );
         }
         instructions.add(new MethodInsnNode(INVOKESTATIC,
-                providerClass.getClassName(),
+                method.getOwner().getClassName(),
                 processStatement.getName(),
                 method.getDescriptor()));
         return instructions;
@@ -80,6 +77,7 @@ public class StatementTranslator {
     }
 
     private boolean isApplicable(ResolvedType type, Expression argument) {
+        // fixme: println(Object) is applicable for println(Any)
         if (argument instanceof Literal) {
             if (!type.isExternal()) // system types must not be defined by user
                 return false;
@@ -90,7 +88,7 @@ public class StatementTranslator {
                 case CHAR:
                     return type.getClassName().equals("java/lang/Character");
                 case STRING:
-                    type.getClassName().equals("java/lang/String");
+                    return type.getClassName().equals("java/lang/String");
                 case DECIMAL:
                     return type.getClassName().equals("java/lang/Short") ||
                             type.getClassName().equals("java/lang/Integer") ||

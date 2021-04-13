@@ -51,6 +51,21 @@ public final class TypeResolver {
         return tryResolveImportedType(fullName, true);
     }
 
+    public ResolvedType resolveExternalType(Class<?> javaClass) {
+        String typeName = javaClass.getName();
+        int arrayEnd = typeName.lastIndexOf('[');
+        if (arrayEnd < 0)
+            return ResolvedType.external(typeName.replaceAll("\\.", "/"), javaClass);
+        else {
+            int arrayDimensions = arrayEnd + 1;
+            String baseName = typeName.substring(arrayEnd + 1);
+            return ResolvedType.externalArray(baseName.replaceAll("\\.", "/"),
+                    javaClass,
+                    arrayDimensions);
+        }
+
+    }
+
     public ResolvedType resolveType(ClassDefinition scope, VariableType type)
             throws CompileException {
         ResolvedType baseType = resolveBaseType(scope, type.getBaseType());
