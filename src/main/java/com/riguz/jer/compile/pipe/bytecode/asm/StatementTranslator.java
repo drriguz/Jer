@@ -23,12 +23,14 @@ public class StatementTranslator {
     private final ClassDefinition providerClass;
     private final TypeResolver typeResolver;
     private final MethodResolver methodResolver;
+    private final ExpressionResolver expressionResolver;
 
     public StatementTranslator(Context context, ClassDefinition providerClass) {
         this.context = context;
         this.providerClass = providerClass;
         this.typeResolver = new TypeResolver(context);
         this.methodResolver = new MethodResolver(context);
+        this.expressionResolver = new ExpressionResolver(context);
     }
 
     public InsnList translate(Statement statement) {
@@ -77,29 +79,13 @@ public class StatementTranslator {
     }
 
     private boolean isApplicable(ResolvedType type, Expression argument) {
-        // fixme: println(Object) is applicable for println(Any)
-        if (argument instanceof Literal) {
-            if (!type.isExternal()) // system types must not be defined by user
-                return false;
-            Literal literal = (Literal) argument;
-            switch (literal.getType()) {
-                case BOOL:
-                    return type.getClassName().equals("java/lang/Boolean");
-                case CHAR:
-                    return type.getClassName().equals("java/lang/Character");
-                case STRING:
-                    return type.getClassName().equals("java/lang/String");
-                case DECIMAL:
-                    return type.getClassName().equals("java/lang/Short") ||
-                            type.getClassName().equals("java/lang/Integer") ||
-                            type.getClassName().equals("java/lang/Long") ||
-                            type.getClassName().equals("java/lang/Float") ||
-                            type.getClassName().equals("java/lang/Double");
-                default:
-                    return false;
-            }
-        }
-        return false;
+        ResolvedType expressionType = expressionResolver.resolveExpression(argument);
+        if (type.isExternal()) {
+            return type.getExternalClass()
+                    .isAssignableFrom(type.getExternalClass());
+        } else
+            return expressionType.getClassName().equals(type.getClassName()) &&
+                    !expressionType.isExternal();
     }
 
     private AbstractInsnNode translateArgument(ResolvedType type, Expression argument) {
