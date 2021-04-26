@@ -91,6 +91,7 @@ public class StatementTranslator {
     private AbstractInsnNode translateArgument(ResolvedType type, Expression argument) {
         if (argument instanceof Literal) {
             Literal literal = (Literal) argument;
+
             if (type.getClassName().equals("java/lang/String"))
                 return new LdcInsnNode(literal.asString());
             else

@@ -6,17 +6,15 @@ import com.riguz.jer.compile.def.Statement;
 import com.riguz.jer.compile.pipe.bytecode.*;
 import com.riguz.jer.compile.pipe.pre.ConstClassDefinition;
 import com.riguz.jer.compile.util.SignatureBuilder;
-import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.MethodNode;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.riguz.jer.compile.pipe.bytecode.asm.AsmUtil.createClass;
-import static com.riguz.jer.compile.pipe.bytecode.asm.AsmUtil.createCompileClass;
+import static com.riguz.jer.compile.pipe.bytecode.asm.AsmUtil.createClassWriter;
 import static org.objectweb.asm.Opcodes.*;
 
 public class ConstClassTranslator extends ClassTranslator<ConstClassDefinition> {
@@ -29,30 +27,28 @@ public class ConstClassTranslator extends ClassTranslator<ConstClassDefinition> 
 
     @Override
     public List<CompiledClass> translate(ConstClassDefinition source) {
-        ClassNode defaultClass = createClass(source.getFullName());
-        List<MethodNode> processes = source.getProcesses()
-                .stream()
-                .map(p -> translateProcess(source, p))
-                .collect(Collectors.toList());
-        defaultClass.methods.addAll(processes);
-        return Collections.singletonList(createCompileClass(
-                source.getFullName() + ".class",
-                defaultClass));
+        ClassWriter classWriter = createClassWriter(source.getFullName());
+        source.getProcesses()
+                .forEach(p -> translateProcess(classWriter, source, p));
+        classWriter.visitEnd();
+        CompiledClass defaultClass = new CompiledClass(
+                source.getFullName(),
+                classWriter.toByteArray());
+        return Collections.singletonList(defaultClass);
     }
 
-    private MethodNode translateProcess(ConstClassDefinition source, Process process) {
-        MethodNode staticMethod = new MethodNode(
-                ACC_PUBLIC + ACC_STATIC,
+    private void translateProcess(ClassWriter classWriter,
+                                  ConstClassDefinition source,
+                                  Process process) {
+        MethodVisitor methodVisitor = classWriter.visitMethod(ACC_PUBLIC + ACC_STATIC,
                 process.getName(),
                 createMethodDescriptor(source, process.getFormalParameters()),
                 null,
                 null
         );
-
-        InsnList instructions = translateStatements(source, process.getBlock().getStatements());
-        staticMethod.instructions.add(instructions);
-        staticMethod.instructions.add(new InsnNode(RETURN));
-        return staticMethod;
+        methodVisitor.visitCode();
+        methodVisitor.visitInsn(RETURN);
+        methodVisitor.visitEnd();
     }
 
     private InsnList translateStatements(ConstClassDefinition source, List<Statement> statements) {
