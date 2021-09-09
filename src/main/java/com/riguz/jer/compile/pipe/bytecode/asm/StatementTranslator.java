@@ -2,21 +2,17 @@ package com.riguz.jer.compile.pipe.bytecode.asm;
 
 import com.riguz.jer.compile.def.Expression;
 import com.riguz.jer.compile.def.Statement;
-import com.riguz.jer.compile.def.expression.Literal;
 import com.riguz.jer.compile.def.statement.ProcessStatement;
 import com.riguz.jer.compile.exception.CompileException;
 import com.riguz.jer.compile.pipe.bytecode.*;
 import com.riguz.jer.compile.pipe.pre.ClassDefinition;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.MethodVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 
 public class StatementTranslator {
     private final Context context;
@@ -24,6 +20,7 @@ public class StatementTranslator {
     private final TypeResolver typeResolver;
     private final MethodResolver methodResolver;
     private final ExpressionResolver expressionResolver;
+    private final ExpressionTranslator expressionTranslator;
 
     public StatementTranslator(Context context, ClassDefinition providerClass) {
         this.context = context;
@@ -31,18 +28,17 @@ public class StatementTranslator {
         this.typeResolver = new TypeResolver(context);
         this.methodResolver = new MethodResolver(context);
         this.expressionResolver = new ExpressionResolver(context);
+        this.expressionTranslator = new ExpressionTranslator();
     }
 
-    public InsnList translate(Statement statement) {
-        InsnList instructions = new InsnList();
+    public void translate(Statement statement, MethodVisitor methodVisitor) {
         if (statement instanceof ProcessStatement) {
             ProcessStatement p = (ProcessStatement) statement;
-            instructions.add(translate(p));
+            translate(p, methodVisitor);
         }
-        return instructions;
     }
 
-    private InsnList translate(ProcessStatement processStatement) {
+    private void translate(ProcessStatement processStatement, MethodVisitor methodVisitor) {
         List<ResolvedMethod> candidates = new ArrayList<>(methodResolver
                 .resolveCandidateProcess(providerClass,
                         processStatement.getName(),
@@ -54,21 +50,20 @@ public class StatementTranslator {
             throw new CompileException("No applicable method found:" + processStatement.getName());
         if (candidates.size() > 1)
             throw new CompileException("Multiple candidates found:" + processStatement.getName());
-        InsnList instructions = new InsnList();
 
         ResolvedMethod method = candidates.get(0);
         for (int i = 0; i < method.getParameters().size(); i++) {
-            instructions.add(
-                    translateArgument(
-                            method.getParameters().get(i).getType(),
-                            processStatement.getArguments().get(i))
+            putArgumentsIntoOperandStack(
+                    method.getParameters().get(i).getType(),
+                    processStatement.getArguments().get(i),
+                    methodVisitor
             );
         }
-        instructions.add(new MethodInsnNode(INVOKESTATIC,
+        methodVisitor.visitMethodInsn(INVOKESTATIC,
                 method.getOwner().getClassName(),
                 processStatement.getName(),
-                method.getDescriptor()));
-        return instructions;
+                method.getDescriptor(),
+                false);
     }
 
     private boolean isApplicable(ResolvedMethod method, List<Expression> arguments) {
@@ -88,17 +83,11 @@ public class StatementTranslator {
                     !expressionType.isExternal();
     }
 
-    private AbstractInsnNode translateArgument(ResolvedType type, Expression argument) {
-        if (argument instanceof Literal) {
-            Literal literal = (Literal) argument;
-
-            if (type.getClassName().equals("java/lang/String"))
-                return new LdcInsnNode(literal.asString());
-            else
-                // fixme:
-                throw new CompileException("Not supported yet");
-        } else
-            // fixme:
-            throw new CompileException("Not supported yet");
+    private void putArgumentsIntoOperandStack(
+            ResolvedType type,
+            Expression argument,
+            MethodVisitor methodVisitor) {
+        // todo: check argument
+        expressionTranslator.translate(argument, methodVisitor);
     }
 }

@@ -19,6 +19,7 @@ public class Jerc {
         -w /Users/pwc/Documents/PROJECTS/Jer/src/test/resources com/riguz/examples/HelloWorld.jer
      */
     public static void main(String[] args) {
+        ThreadLocal
         final CommandLine cmd;
         final Options options = buildOptions();
         try {

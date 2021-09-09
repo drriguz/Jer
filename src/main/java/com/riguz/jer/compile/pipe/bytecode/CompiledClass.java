@@ -7,7 +7,7 @@ public class CompiledClass {
 
     public CompiledClass(String classFullName, byte[] bytes) {
         this.classFullName = classFullName;
-        this.fileName = classFullName + ".java";
+        this.fileName = classFullName + ".class";
         this.bytes = bytes;
     }
 

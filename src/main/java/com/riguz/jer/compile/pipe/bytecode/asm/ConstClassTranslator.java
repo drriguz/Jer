@@ -47,18 +47,16 @@ public class ConstClassTranslator extends ClassTranslator<ConstClassDefinition> 
                 null
         );
         methodVisitor.visitCode();
-        methodVisitor.visitInsn(RETURN);
+        generateProcessCode(methodVisitor, source, process.getBlock().getStatements());
         methodVisitor.visitEnd();
     }
 
-    private InsnList translateStatements(ConstClassDefinition source, List<Statement> statements) {
-        InsnList instructions = new InsnList();
+    private void generateProcessCode(MethodVisitor methodVisitor,
+                                     ConstClassDefinition source,
+                                     List<Statement> statements) {
         StatementTranslator statementTranslator = new StatementTranslator(context, source);
         statements
-                .stream()
-                .map(statementTranslator::translate)
-                .forEach(instructions::add);
-        return instructions;
+                .forEach(s -> statementTranslator.translate(s, methodVisitor));
     }
 
     private String createMethodDescriptor(ConstClassDefinition source,
